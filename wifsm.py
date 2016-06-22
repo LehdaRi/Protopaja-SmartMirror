@@ -3,50 +3,54 @@ import urllib.parse
 import simplejson
 import re
 
-def main():
-	while True:
-		user_input = str(input("\n"))
-		get_command = re.findall(r'get \d', user_input)
-		if len(get_command) == 1:
-			user = int(''.join(re.findall(r'\d', ''.join(get_command))))
-			if user < userNumber():
-				getCalendarEvents(user)
-		elif user_input == "refresh":
-			pass
-		elif user_input == "exit":
-			break
-		else:
-			pass
-			
-def getCalendarEvents(userID):
-	url3 = 'https://www.googleapis.com/calendar/v3/calendars/primary/events'
-	try:
-		a_token_h = "Bearer " + clientToken(userID)
-		headers = {}
-		headers['Authorization'] = a_token_h
-		req = urllib.request.Request(url3, headers=headers)
-		resp = urllib.request.urlopen(req)
+class User:
+	def __init__(self, userID):
+		self.id = userID
+		
+	def getCalendarEvents(self):#	Google Api
+		url3 = 'https://www.googleapis.com/calendar/v3/calendars/primary/events'
+		if self.id < userNumber():
+			try:
+				a_token_h = "Bearer " + clientToken(self.id)
+				headers = {}
+				headers['Authorization'] = a_token_h
+				req = urllib.request.Request(url3, headers=headers)
+				resp = urllib.request.urlopen(req)
 
-		#simplejson.load(response) converters url response data into python data (dicts, lists, strings)
-		json = simplejson.load(resp)
-		events = json["items"]
-		for event in events:
-			print(event["summary"])
-	except:
-		refreshAccess(userID)
-		try:
-			a_token_h = "Bearer " + clientToken(userID)
-			headers = {}
-			headers['Authorization'] = a_token_h
-			req = urllib.request.Request(url3, headers=headers)
-			resp = urllib.request.urlopen(req)
-			json = simplejson.load(resp)
-			events = json["items"]
-			for event in events:
-				print(event["summary"])
-		except Exception as e:
-			print(str(e))
-
+				#simplejson.load(response) converters url response data into python data (dicts, lists, strings)
+				json = simplejson.load(resp)
+				events = json["items"]
+				elist = []
+				for event in events:
+					stuff = {}
+					stuff["start"] = event["start"]["dateTime"]
+					stuff["end"] = event["end"]["dateTime"]
+					stuff["title"] = event['summary']
+					elist.append(stuff)
+				return elist
+			except:
+				try:
+					refreshAccess(self.id)
+					a_token_h = "Bearer " + clientToken(self.id)
+					headers = {}
+					headers['Authorization'] = a_token_h
+					req = urllib.request.Request(url3, headers=headers)
+					resp = urllib.request.urlopen(req)
+					json = simplejson.load(resp)
+					events = json["items"]
+					elist = []
+					for event in events:
+						stuff = {}
+						stuff["start"] = event["start"]["dateTime"]
+						stuff["end"] = event["end"]["dateTime"]
+						stuff["title"] = event['summary']
+						elist.append(stuff)
+					return elist
+				except Exception as e:
+					print(str(e))
+					return None
+					
+#_____________________Google Api__________________________start
 def refreshAccess(userID):
 	url2 = 'https://www.googleapis.com/oauth2/v4/token'
 	
@@ -66,7 +70,7 @@ def refreshAccess(userID):
 		writeAToken(a_token, userID)
 	except Exception as e:
 		print(str(e))
-	
+		
 def clientToken(userID, type='a'):
 	fob = open('secret_doc.txt', 'r')
 	lines = fob.readlines()
@@ -97,6 +101,7 @@ def userNumber():
 	fob.close()
 	number = int((len(lines) - 2)/2)
 	return number
+#_____________________Google Api__________________________end
 
 def clientInfo(type='id'):
 	fob = open('secret_doc.txt', 'r')
@@ -110,4 +115,4 @@ def clientInfo(type='id'):
 		return client_id
 	
 if __name__ == '__main__':
-    main()
+    print("This is a module.")

@@ -8,9 +8,6 @@
 
 int main()
 {
-
-	printf("%f\n", Vision::Functions::Add(3.0, 14.34));
-
     return Vision::testMain();;
 }
 

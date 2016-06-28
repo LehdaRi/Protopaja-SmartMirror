@@ -15,16 +15,4 @@ namespace Vision
 
 	int VISION_API testMain(void);
 
-	class Functions
-	{
-	public:
-		// Returns a + b
-		static VISION_API double Add(double a, double b);
-
-		// Returns a * b
-		static VISION_API double Multiply(double a, double b);
-
-		// Returns a + (a * b)
-		static VISION_API double AddMultiply(double a, double b);
-	};
 }

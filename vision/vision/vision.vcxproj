@@ -75,9 +75,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>$(SolutionPath)/opencv/x64/vc14/lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(KINECTSDK20_DIR)\Lib\x64;$(SolutionPath)/opencv/x64/vc14/lib;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(SolutionPath)/opencv/x64/vc14/bin;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(SolutionPath)/opencv/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(KINECTSDK20_DIR)\inc;$(SolutionPath)/opencv/include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -110,8 +110,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_core310.lib;opencv_highgui310.lib;opencv_imgproc310.lib;opencv_imgcodecs310.lib;opencv_video310.lib;opencv_videoio310.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)/opencv/x64/vc14/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_core310.lib;opencv_highgui310.lib;opencv_imgproc310.lib;opencv_imgcodecs310.lib;opencv_video310.lib;opencv_videoio310.lib;kinect20.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(KINECTSDK20_DIR)\lib;$(SolutionDir)/opencv/x64/vc14/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

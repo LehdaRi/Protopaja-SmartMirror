@@ -1,11 +1,32 @@
 import urllib.request
 import urllib.parse
 import simplejson
+import tweepy
+import string
 import re
 
 class User:
 	def __init__(self, userID):
 		self.id = userID
+		
+	def getHomeTimeline(self):
+		auth = tweepy.OAuthHandler(Tw_consumerInfo(), Tw_consumerInfo("secret"))
+		if Tw_getKey(self.id) != 'error' and Tw_getKey(self.id, 'secret') != 'error':
+			auth.set_access_token(Tw_getKey(self.id), Tw_getKey(self.id, 'secret'))
+			api = tweepy.API(auth)
+			statuses = tweepy.Cursor(api.home_timeline).items(20)
+			tweets = []
+			for s in statuses:
+				string1 = ''
+				for c in s.text:
+					if c in letters:
+						string1 = string1 + c
+					else:
+						string1 = string1 + '(?)'
+				tweets.append(string1)
+			return tweets
+		else:
+			return 'error'
 		
 	def getCalendarEvents(self):#	Google Api
 		url3 = 'https://www.googleapis.com/calendar/v3/calendars/primary/events'
@@ -50,7 +71,7 @@ class User:
 					print(str(e))
 					return None
 					
-#_____________________Google Api__________________________start
+#_____________________Google Api__________________________
 def refreshAccess(userID):
 	url2 = 'https://www.googleapis.com/oauth2/v4/token'
 	
@@ -95,14 +116,6 @@ def writeAToken(key, userID):
 	fob.writelines(lines)
 	fob.close()
 	
-def userNumber():
-	fob = open('secret_doc.txt', 'r')
-	lines = fob.readlines()
-	fob.close()
-	number = int((len(lines) - 2)/2)
-	return number
-#_____________________Google Api__________________________end
-
 def clientInfo(type='id'):
 	fob = open('secret_doc.txt', 'r')
 	lines = fob.readlines()
@@ -113,6 +126,44 @@ def clientInfo(type='id'):
 	else:
 		client_id = ''.join(re.findall(r'client_id: (.*?)\n', lines[0]))
 		return client_id
+	
+#_____________________Twitter Api__________________________
+def Tw_getKey(user, type=None):
+	fob = open('Tw_secret.txt', 'r')
+	lines = fob.readlines()
+	fob.close()
+	if user >= userNumber():
+		return 'error'
+	if type is 'secret':
+		secret = ''.join(re.findall(r'(.*?)\n', lines[2*(user + 1) + 1]))
+		return secret
+	else:
+		token = ''.join(re.findall(r'(.*?)\n', lines[2*(user + 1)]))
+		return token
+	
+def Tw_consumerInfo(type=None):
+	fob = open('Tw_secret.txt', 'r')
+	lines = fob.readlines()
+	fob.close()
+	if type is 'secret':
+		consumer_secret = ''.join(re.findall(r'consumer_secret: (.*?)\n', lines[1]))
+		return consumer_secret
+	else:
+		consumer_key = ''.join(re.findall(r'consumer_key: (.*?)\n', lines[0]))
+		return consumer_key
+		
+letters = string.printable + 'äöå'
+#____________________________________________________________		
+
+def userNumber(api='g'):
+	if api == 'Tw':
+		fob = open('Tw_secret.txt', 'r')
+	else:
+		fob = open('secret_doc.txt', 'r')
+	lines = fob.readlines()
+	fob.close()
+	number = int((len(lines) - 2)/2)
+	return number
 	
 if __name__ == '__main__':
     print("This is a module.")

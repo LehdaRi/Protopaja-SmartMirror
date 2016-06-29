@@ -110,8 +110,8 @@ namespace Vision
 		SAFERELEASE(kinectSensor);
 		return 0;
 
-		/*
-		Mat image;          //Create Matrix to store image
+		
+		/*Mat image;          //Create Matrix to store image
 		VideoCapture cap;          //initialize capture
 		cap.open(0);
 		namedWindow("window", 1);          //create window to show image

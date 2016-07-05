@@ -22,7 +22,7 @@ uniform sampler2D tex2;
 
 void main() {
     if (UV.x < 0.5)
-        color = pow(vec4(texture(tex1, vec2(UV.x*2, UV.y)).rgb, 1.0), vec4(0.5, 0.5, 0.5, 1.0));
+        color = vec4(texture(tex1, vec2(UV.x*2-1, UV.y)).rgb, 1.0);
     else
         color = vec4(texture(tex2, vec2(UV.x*2-1, UV.y)).rgb, 1.0);
 }

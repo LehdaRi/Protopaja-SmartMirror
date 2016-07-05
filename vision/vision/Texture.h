@@ -6,14 +6,6 @@
 #include <GL/glew.h>
 
 
-#define QUAD(xPos, yPos, xSize, ySize) xPos, yPos, 0.0f,\
-                                       xPos+xSize, yPos, 0.0f,\
-                                       xPos, yPos+ySize, 0.0f,\
-                                       xPos, yPos+ySize, 0.0f,\
-                                       xPos+xSize, yPos, 0.0f,\
-                                       xPos+xSize, yPos+ySize, 0.0f
-
-
 namespace Vision {
 
 	class Cam;

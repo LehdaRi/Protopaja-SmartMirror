@@ -20,6 +20,7 @@ Texture::Texture(uint32_t width, uint32_t height,
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
 	glTexImage2D(GL_TEXTURE_2D, 0, format, _width, _height, 0, dataFormat, dataType, data);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Texture::~Texture(void) {
@@ -64,8 +65,9 @@ void Texture::loadFromFile(const std::string& fileName) {
 	sf::Image img;
 	img.loadFromFile(fileName);
 	auto is = img.getSize();
-	if (is.x != _width || is.y != _height)
-		return;
+	printf("%u, %u\n", is.x, is.y);
+	//if (is.x != _width || is.y != _height)
+		//return;
 
 	glBindTexture(GL_TEXTURE_2D, _textureId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, is.x, is.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr());
@@ -73,6 +75,7 @@ void Texture::loadFromFile(const std::string& fileName) {
 
 void Texture::updateFromCam(Cam& cam) {
 	glBindTexture(GL_TEXTURE_2D, _textureId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0,
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, cam.width(), cam.height(), 0,
 	             GL_BGR, GL_UNSIGNED_BYTE, cam.frame().data);
 }

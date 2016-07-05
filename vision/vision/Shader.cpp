@@ -12,13 +12,13 @@ Shader::Shader(const std::string& vsFileName, const std::string& fsFileName) {
 	FILE* vsf;
 	fopen_s(&vsf, vsFileName.c_str(), "rb");
 	if (!vsf)
-		throw "File could not be opened!"; // TODO_EXCEPTION
+		fprintf(stderr, "Unable to open vertex shader from file\n", vsFileName.c_str());
 
 	FILE* fsf;
 	fopen_s(&fsf, fsFileName.c_str(), "rb");
 	if (!fsf)
-		throw "File could not be opened!"; // TODO_EXCEPTION
-
+		fprintf(stderr, "Unable to open fragment shader from file\n", vsFileName.c_str());
+	
 	fseek(vsf, 0L, SEEK_END);
 	auto vsfs = ftell(vsf);
 	std::unique_ptr<char> vsBufUnique(new char[vsfs + 1]);
@@ -27,7 +27,7 @@ Shader::Shader(const std::string& vsFileName, const std::string& fsFileName) {
 	vsBufUnique.get()[vsfs] = '\0';
 	fclose(vsf);
 	const char* vsSrcPtr = vsBufUnique.get();
-
+	
 	fseek(fsf, 0L, SEEK_END);
 	auto fsfs = ftell(fsf);
 	std::unique_ptr<char> fsBufUnique(new char[fsfs + 1]);
@@ -36,7 +36,7 @@ Shader::Shader(const std::string& vsFileName, const std::string& fsFileName) {
 	fsBufUnique.get()[fsfs] = '\0';
 	fclose(fsf);
 	const char* fsSrcPtr = fsBufUnique.get();
-
+	
 	GLuint vsObjectId = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fsObjectId = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -52,7 +52,7 @@ Shader::Shader(const std::string& vsFileName, const std::string& fsFileName) {
 		char* infoLog = new char[infoLogLength];
 		glGetShaderInfoLog(vsObjectId, infoLogLength, NULL, &infoLog[0]);
 		fprintf(stderr, "%s", infoLog);
-		throw infoLog; // TODO_EXCEPTION: throw a proper exception
+		//throw infoLog; // TODO_EXCEPTION: throw a proper exception
 	}
 
 	glShaderSource(fsObjectId, 1, &fsSrcPtr, NULL);
@@ -65,7 +65,7 @@ Shader::Shader(const std::string& vsFileName, const std::string& fsFileName) {
 		char* infoLog = new char[infoLogLength];
 		glGetShaderInfoLog(fsObjectId, infoLogLength, NULL, &infoLog[0]);
 		fprintf(stderr, "%s", infoLog);
-		throw infoLog; // TODO_EXCEPTION: throw a proper exception
+		//throw infoLog; // TODO_EXCEPTION: throw a proper exception
 	}
 
 	programId_ = glCreateProgram();
@@ -84,7 +84,7 @@ Shader::Shader(const std::string& vsFileName, const std::string& fsFileName) {
 		char* infoLog = new char[infoLogLength];
 		glGetProgramInfoLog(programId_, infoLogLength, NULL, &infoLog[0]);
 		fprintf(stderr, "%s", infoLog);
-		throw infoLog; // TODO_EXCEPTION: throw a proper exception
+		//throw infoLog; // TODO_EXCEPTION: throw a proper exception
 	}
 
 	uniformPosition_MVP_ = glGetUniformLocation(programId_, "MVP");

@@ -14,7 +14,7 @@ namespace Vision {
 	class Texture {
 	public:
 		Texture(uint32_t width, uint32_t height, GLenum format = GL_RGBA,
-		        GLenum wrapS = GL_REPEAT, GLenum wrapT = GL_REPEAT, void* data = nullptr,
+		        GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE, void* data = nullptr,
 		        GLenum dataFormat = GL_RGBA, GLenum dataType = GL_UNSIGNED_BYTE);
 		~Texture(void);
 

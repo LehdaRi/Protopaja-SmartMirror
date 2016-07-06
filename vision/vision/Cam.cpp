@@ -21,7 +21,6 @@ Cam::Cam(int camId, uint32_t width, uint32_t height, double fps) :
 	_cap.set(CV_CAP_PROP_FRAME_HEIGHT, _height);
 	_cap.set(CV_CAP_PROP_FOURCC,CV_FOURCC('M','J','P','G'));
 	_cap.set(CV_CAP_PROP_FPS, fps);
-	//_cap.set(CV_CAP_PROP_BUFFERSIZE, 3);
 
 	_width = _cap.get(CV_CAP_PROP_FRAME_WIDTH);
 	_height = _cap.get(CV_CAP_PROP_FRAME_HEIGHT);

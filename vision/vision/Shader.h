@@ -13,17 +13,15 @@ namespace Vision {
 		~Shader(void);
 
 		Shader(const Shader&) = delete;
-		Shader(Shader&&) = delete;
+		Shader(Shader&&);
 		Shader& operator=(const Shader&) = delete;
-		Shader& operator=(Shader&&) = delete;
+		Shader& operator=(Shader&&);
 
 		GLuint getId(void) const;
 		void use(void);
 
 	private:
 		GLuint programId_;
-		GLuint uniformPosition_MVP_;
-		GLuint uniformPosition_Color_;
 	};
 
 }

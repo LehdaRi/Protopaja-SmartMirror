@@ -87,9 +87,6 @@ Shader::Shader(const std::string& vsFileName, const std::string& fsFileName) {
 		//throw infoLog; // TODO_EXCEPTION: throw a proper exception
 	}
 
-	uniformPosition_MVP_ = glGetUniformLocation(programId_, "MVP");
-	uniformPosition_Color_ = glGetUniformLocation(programId_, "Color");
-
 	if (vsObjectId)
 		glDeleteShader(vsObjectId);
 
@@ -100,6 +97,22 @@ Shader::Shader(const std::string& vsFileName, const std::string& fsFileName) {
 Shader::~Shader(void) {
 	if (programId_)
 		glDeleteProgram(programId_);
+}
+
+Shader::Shader(Shader&& other) :
+	programId_(other.programId_)
+{
+	other.programId_ = 0;
+}
+
+Shader& Shader::operator=(Shader&& other) {
+	if (programId_)
+		glDeleteProgram(programId_);
+
+	programId_ = other.programId_;
+	other.programId_ = 0;
+
+	return *this;
 }
 
 GLuint Shader::getId(void) const {

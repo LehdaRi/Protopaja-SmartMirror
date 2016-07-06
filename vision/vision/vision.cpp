@@ -30,7 +30,7 @@ namespace Vision
 {
 
 	int testMain(void) {		
-		sf::Window window(sf::VideoMode(1920, 540), "Vision", sf::Style::Default,
+		sf::Window window(sf::VideoMode(1440, 810), "Vision", sf::Style::Default,
 		                  sf::ContextSettings{ 24, 8, 4, 3, 0 });
 		window.setFramerateLimit(30);
 		window.setActive();
@@ -53,6 +53,13 @@ namespace Vision
 				// Request for closing the window
 				if (event.type == sf::Event::Closed)
 					window.close();
+				else if (event.type == sf::Event::KeyPressed) {
+					switch (event.key.code) {
+					case sf::Keyboard::A:
+						canvas.updateShader();
+						break;
+					}
+				}
 			}
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

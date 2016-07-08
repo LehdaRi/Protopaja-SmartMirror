@@ -105,8 +105,6 @@ void Kinect::operator()(Texture& depthTexture, Texture& colorTexture) {
 			hr = _colorFrameData->CopyConvertedFrameDataToArray(colorFrameWidth * colorFrameHeight * 4 * sizeof(unsigned char),
 				&_colorFrameDataConverted[0], ColorImageFormat_Rgba);
 			if (SUCCEEDED(hr)) {
-				//printf("w: %u, h: %u c: %u f: %d\n", colorFrameWidth, colorFrameHeight,
-					//&_colorFrameDataConverted[0], format);
 				glBindTexture(GL_TEXTURE_2D, colorTexture);
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, colorFrameWidth, colorFrameHeight, 0,
 					GL_RGBA, GL_UNSIGNED_BYTE, &_colorFrameDataConverted[0]);

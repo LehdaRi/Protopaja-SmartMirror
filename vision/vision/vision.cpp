@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "vision.h"
-#include "Canvas.h"
+#include "Device.h"
 //#include "Texture.h"
 //#include "Shader.h"
 
@@ -21,8 +21,6 @@
                                        xPos+xSize, yPos+ySize, 0.0f
 
 
-
-//using namespace cv;
 using namespace std;
 
 
@@ -42,7 +40,7 @@ namespace Vision
 
 		glEnable(GL_TEXTURE_2D);
 
-		Canvas canvas;
+		Device device;
 
 		while (window.isOpen())
 		{
@@ -56,7 +54,7 @@ namespace Vision
 				else if (event.type == sf::Event::KeyPressed) {
 					switch (event.key.code) {
 					case sf::Keyboard::A:
-						canvas.updateShader();
+						device.updateShader();
 						break;
 					}
 				}
@@ -64,7 +62,7 @@ namespace Vision
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			canvas.draw();
+			device.draw();
 
 			window.display();
 		}

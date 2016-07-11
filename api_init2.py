@@ -6,6 +6,7 @@ import re
 import time
 
 def main():
+	goog_clearKeys()
 	threads = []	
 	while True:
 		try:
@@ -37,7 +38,7 @@ def getUser(threadID):
 
 	values1 =  {'client_id' : clientInfo(),
 					'scope' : 'https://www.googleapis.com/auth/calendar.readonly'}
-		
+	
 	data = urllib.parse.urlencode(values1)
 	data = data.encode('utf-8')
 	req = urllib.request.Request(url1,data)
@@ -72,8 +73,8 @@ def getUser(threadID):
 	r_token = ''.join(re.findall(r'"refresh_token": "(.*?)"', resp_data))
 	a_token = ''.join(re.findall(r'"access_token": "(.*?)"', resp_data))
 	
-	writeKey(a_token, threadID)
-	writeKey(r_token, threadID, 'r')	
+	writeKey(r_token, threadID, 'r')
+	writeKey(a_token, threadID)	
 
 docLock = threading.Lock()
 		
@@ -92,6 +93,15 @@ def writeKey(key, threadID, type='a'):
 	fob.writelines(lines)
 	fob.close()	
 	docLock.release()
+	
+def goog_clearKeys():
+	fob = open('secret_doc.txt', 'r')
+	lines = fob.readlines()
+	fob.close()
+	lines2 = [lines[0], lines[1]]
+	fob = open('secret_doc.txt', 'w')
+	fob.writelines(lines2)
+	fob.close()		
 	
 def clientInfo(type='id'):
 	fob = open('secret_doc.txt', 'r')

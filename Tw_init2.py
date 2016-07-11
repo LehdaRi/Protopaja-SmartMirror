@@ -163,10 +163,9 @@ def Tw_clearKeys():
 	fob = open('Tw_secret.txt', 'r')
 	lines = fob.readlines()
 	fob.close()
-	for n in range(len(lines) - 2):
-		lines[n + 2] = ''
+	lines2 = [lines[0], lines[1]]
 	fob = open('Tw_secret.txt', 'w')
-	fob.writelines(lines)
+	fob.writelines(lines2)
 	fob.close()		
 	
 def consumerInfo(type='key'):

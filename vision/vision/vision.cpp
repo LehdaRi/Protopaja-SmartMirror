@@ -3,63 +3,71 @@
 
 #include "stdafx.h"
 #include "vision.h"
+#include "Device.h"
+//#include "Texture.h"
+//#include "Shader.h"
 
-#include <opencv2/opencv.hpp>
-#include <opencv/highgui.h>
+
+#include <SFML/Window.hpp>
+
+#include <iostream>
 
 
-using namespace cv;
+#define QUAD(xPos, yPos, xSize, ySize) xPos, yPos, 0.0f,\
+                                       xPos+xSize, yPos, 0.0f,\
+                                       xPos, yPos+ySize, 0.0f,\
+                                       xPos, yPos+ySize, 0.0f,\
+                                       xPos+xSize, yPos, 0.0f,\
+                                       xPos+xSize, yPos+ySize, 0.0f
+
+
+using namespace std;
 
 
 namespace Vision
 {
-	int testMain(void) {
-		Mat image;          //Create Matrix to store image
-		VideoCapture cap;          //initialize capture
-		cap.open(0);
-		namedWindow("window", 1);          //create window to show image
-		while (1) {
-			cap >> image;          //copy webcam stream to image
-			imshow("window", image);          //print image to screen
-			waitKey(33);          //delay 33ms
+
+	int testMain(void) {		
+		sf::Window window(sf::VideoMode(1440, 810), "Vision", sf::Style::Default,
+		                  sf::ContextSettings{ 24, 8, 4, 3, 0 });
+		window.setFramerateLimit(30);
+		window.setActive();
+
+		if (glewInit() != GLEW_OK) {
+			fprintf(stderr, "Unable to init GLEW");
+			return -1;
 		}
+
+		glEnable(GL_TEXTURE_2D);
+
+		Device device;
+
+		while (window.isOpen())
+		{
+			// Event processing
+			sf::Event event;
+			while (window.pollEvent(event))
+			{
+				// Request for closing the window
+				if (event.type == sf::Event::Closed)
+					window.close();
+				else if (event.type == sf::Event::KeyPressed) {
+					switch (event.key.code) {
+					case sf::Keyboard::A:
+						device.updateShader();
+						break;
+					}
+				}
+			}
+
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			device.draw();
+
+			window.display();
+		}
+
 		return 0;
 	}
 
-	double Functions::Add(double a, double b)
-	{
-		return a + b;
-	}
-
-	double Functions::Multiply(double a, double b)
-	{
-		return a * b;
-	}
-
-	double Functions::AddMultiply(double a, double b)
-	{
-		return a + (a * b);
-	}
 }
-
-/**
-#include <opencv2/opencv.hpp>
-#include <opencv/highgui.h>
-
-
-using namespace cv;
-
-
-int main() {
-    Mat image;          //Create Matrix to store image
-    VideoCapture cap;          //initialize capture
-    cap.open(0);
-    namedWindow("window", 1);          //create window to show image
-    while (1) {
-        cap >> image;          //copy webcam stream to image
-        imshow("window", image);          //print image to screen
-        waitKey(33);          //delay 33ms
-    }
-    return 0;
-}
-**/

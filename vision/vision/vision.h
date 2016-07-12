@@ -1,6 +1,11 @@
 #pragma once
 
 
+#include <thread>
+
+#include "Device.h"
+
+
 #ifdef MATHLIBRARY_EXPORTS
 #define VISION_API __declspec(dllexport) 
 #else
@@ -11,28 +16,16 @@
 namespace Vision
 {
 
-	struct Event {
-		/**	type
-		*	0:	invalid type
-		*	1:	person entered
-		*	2:	person exited
-		*	3:	gesture
-		*/
-		int type;
+	class VISION_API Vision {
+	public:
+		Vision(void);
+		~Vision(void);
 
-		/**	data
-		*	depends on type:
-		*	person entered(1):	id of the person
-		*	person exited(2):	id of the person
-		*	gesture(3):			id of the gesture (will be specified later)
-		*/
-		int data;
+		//	returns true if new event was found, 
+		bool pollEvent(Event* event);
+
+	private:
+		Device		_device;
+		std::thread	_mainThread;
 	};
-
-
-	int VISION_API testMain(void);
-
-	void VISION_API launchVision(void);
-	void VISION_API terminateVision(void);
-
 }

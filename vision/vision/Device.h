@@ -5,8 +5,11 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Kinect.h"
+#include "Event.h"
 
-#include <thread>
+#include <atomic>
+#include <mutex>
+#include <deque>
 
 
 #define QUAD(xPos, yPos, xSize, ySize) xPos, yPos, 0.0f,\
@@ -20,29 +23,42 @@
 namespace Vision {
 
 	class Device {
+	private:
+		struct Env {
+			Shader		shader;
+			Texture		camTexture1;
+			Texture		camTexture2;
+			Texture		depthTexture;
+			Texture		colorTexture;
+
+			GLuint		vertexArrayId;
+			GLuint		vertexBufferId;
+
+			Cam			cam1;
+			Cam			cam2;
+			Kinect		kinect;
+
+			Env(void);
+		};
+
 	public:
 		Device(void);
 
-		void mainLoop(void);
-		void draw(void);
-		void updateShader(void);
+		int mainLoop(bool useWindow = true);
+		void terminate(void);
+
+		bool pollEvent(Event& event);
+
+		void draw(Env& env);
+		void updateShader(Env& env);
 
 	private:
-		std::thread	_mainThread;
+		std::atomic<bool>	_terminating;
 
-		GLuint		_vertexArrayId;
-		GLuint		_vertexBufferId;
+		std::deque<Event>	_eventQueue;
+		std::mutex			_eventMutex;
 
-		Shader		_shader;
-
-		Texture		_camTexture1;
-		Texture		_camTexture2;
-		Texture		_depthTexture;
-		Texture		_colorTexture;
-
-		Cam			_cam1;
-		Cam			_cam2;
-		Kinect		_kinect;
+		void addEvent(int type, int data);
 	};
 
 }

@@ -39,6 +39,10 @@ Cam::Cam(int camId, uint32_t width, uint32_t height, double fps) :
 	//texture_ = Texture<>(_width, _height, GL_RGB, GL_REPEAT, GL_REPEAT, _frame.data, GL_BGR);
 }
 
+void Cam::loop(void) {
+	
+}
+
 void Cam::read(void) {
 	//  read frame from webcam
 	if (!_cap.read(_frame) || _frame.empty()) { // read a new frame from video

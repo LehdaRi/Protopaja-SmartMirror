@@ -12,7 +12,7 @@ int main()
 {
 	using namespace std::chrono_literals;
 
-	Vision::Vision vision;
+	Vision::Vision vision(true, true);
 
 	Vision::Event event;
 	for (bool running = true; running;) {

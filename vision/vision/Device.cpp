@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Device.h"
+#include "vision.h"
 
 #include <SFML/Window.hpp>
 
@@ -23,7 +23,7 @@ Device::Device(void) :
 	_terminating(false)
 {}
 
-int Device::mainLoop(bool useWindow) {
+int Device::mainLoop(bool useCams, bool useWindow) {
 	//	init window
 	sf::Window window(sf::VideoMode(1440, 810), "Vision", sf::Style::Default,
 	                  sf::ContextSettings{ 24, 8, 4, 3, 0 });
@@ -114,27 +114,20 @@ void Device::terminate(void) {
 	_terminating = true;
 }
 
-bool Device::pollEvent(Event& event) {
-	std::lock_guard<std::mutex> lock(_eventMutex);
-	
-	if (_eventQueue.size() == 0)
-		return false;
+void Device::update(Env& env) {
+	env.cam1.read();
+	env.cam2.read();
 
-	event = _eventQueue.front();
-	_eventQueue.pop_front();
-	return true;
+	env.kinect(env.depthTexture, env.colorTexture);
 }
 
 void Device::draw(Env& env) {
 	//	update textures
-	env.cam1.read();
-	env.cam2.read();
 
 	env.camTexture1.updateFromCam(env.cam1);
 	env.camTexture2.updateFromCam(env.cam2);
 
 	env.shader.use();
-	env.kinect(env.depthTexture, env.colorTexture);
 
 	glBindVertexArray(env.vertexArrayId);
 
@@ -154,6 +147,17 @@ void Device::draw(Env& env) {
 
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+bool Device::pollEvent(Event& event) {
+	std::lock_guard<std::mutex> lock(_eventMutex);
+
+	if (_eventQueue.size() == 0)
+		return false;
+
+	event = _eventQueue.front();
+	_eventQueue.pop_front();
+	return true;
 }
 
 void Device::updateShader(Env& env) {

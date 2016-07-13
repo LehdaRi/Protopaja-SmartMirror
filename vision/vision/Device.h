@@ -22,6 +22,8 @@
 
 namespace Vision {
 
+	class Event;
+
 	class Device {
 	private:
 		struct Env {
@@ -44,12 +46,14 @@ namespace Vision {
 	public:
 		Device(void);
 
-		int mainLoop(bool useWindow = true);
+		int mainLoop(bool useCams = true, bool useWindow = true);
 		void terminate(void);
+
+		void update(Env& env);
+		void draw(Env& env);
 
 		bool pollEvent(Event& event);
 
-		void draw(Env& env);
 		void updateShader(Env& env);
 
 	private:

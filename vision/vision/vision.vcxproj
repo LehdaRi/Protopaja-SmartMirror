@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cam.h" />
+    <ClInclude Include="config.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Kinect.h" />

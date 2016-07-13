@@ -1,9 +1,12 @@
 #pragma once
 
 
+#include "config.h"
+
+
 namespace Vision {
 
-	struct Event {
+	struct VISION_API Event {
 		/**	type
 		*	0:	invalid type
 		*	1:	person entered

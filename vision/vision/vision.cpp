@@ -11,9 +11,9 @@
 using namespace std;
 
 
-Vision::Vision::Vision(void) :
+Vision::Vision::Vision(bool useCams, bool useWindow) :
 	_device			(),
-	_mainThread		(&Device::mainLoop, &_device, true)
+	_mainThread		(&Device::mainLoop, &_device, useCams, useWindow)
 {}
 
 Vision::Vision::~Vision(void) {

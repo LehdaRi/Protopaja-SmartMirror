@@ -6,7 +6,7 @@
 #include "Device.h"
 
 
-#ifdef MATHLIBRARY_EXPORTS
+#ifdef NDEBUG
 #define VISION_API __declspec(dllexport) 
 #else
 #define VISION_API __declspec(dllimport) 
@@ -21,7 +21,7 @@ namespace Vision
 		Vision(void);
 		~Vision(void);
 
-		//	returns true if new event was found, 
+		//	returns true if new event was found, false otherwise
 		bool pollEvent(Event* event);
 
 	private:

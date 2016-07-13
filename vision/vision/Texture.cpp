@@ -11,7 +11,7 @@ using namespace Vision;
 Texture::Texture(uint32_t width, uint32_t height,
                  GLenum format, GLenum wrapS, GLenum wrapT,
                  void* data, GLenum dataFormat, GLenum dataType) :
-	_textureId(0), _width(0), _height(0)
+	_textureId(0), _width(width), _height(height)
 {
 	glGenTextures(1, &_textureId);
 	glBindTexture(GL_TEXTURE_2D, _textureId);
@@ -73,9 +73,9 @@ void Texture::loadFromFile(const std::string& fileName) {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, is.x, is.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr());
 }
 
-void Texture::updateFromCam(Cam& cam) {
+void Texture::update(void* data) {
 	glBindTexture(GL_TEXTURE_2D, _textureId);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, cam.width(), cam.height(), 0,
-	             GL_BGR, GL_UNSIGNED_BYTE, cam.frame().data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0,
+	             GL_BGR, GL_UNSIGNED_BYTE, data);
 }

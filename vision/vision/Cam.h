@@ -2,7 +2,9 @@
 
 
 #include <cstdint>
-#include <thread>
+#include <mutex>
+#include <atomic>
+#include <condition_variable>
 #include <opencv2/opencv.hpp>
 #include <opencv/highgui.h>
 
@@ -10,25 +12,35 @@
 
 namespace Vision {
 
+	class Texture;
+
 	class Cam {
 	public:
 		Cam(int camId, uint32_t width, uint32_t height, double fps);
 
 		void loop(void);
+		void terminate(void);
 			
 		void read(void);
 
 		unsigned width(void) const;
 		unsigned height(void) const;
 
-		const cv::Mat& frame(void) const;
+		void writeToTexture(Texture& texture);
+		//const cv::Mat& frame(void);
 
 	private:
-		std::thread				_thread;
+		std::atomic<bool>		_running;
+		std::condition_variable	_cv;
+		std::mutex				_mutex;
+		bool					_read;
+
+		int						_camId;
+		unsigned				_width, _height;
 
 		cv::VideoCapture		_cap;
 		cv::Mat					_frame;
-		unsigned				_width, _height;
+
 		std::vector<uint8_t>	_frameData;
 	};
 

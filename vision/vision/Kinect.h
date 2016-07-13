@@ -19,7 +19,7 @@ namespace Vision {
 		Kinect(const Kinect&)				= delete;
 		Kinect& operator=(const Kinect&)	= delete;
 
-		void operator()(Texture& depthTexture, Texture& colorTexture);
+		void operator()(Texture* depthTexture, Texture* colorTexture);
 
 	private:
 		IKinectSensor*			_sensor;

@@ -22,7 +22,7 @@ int main()
 				running = false;
 		}
 
-		std::this_thread::sleep_for(1s);
+		std::this_thread::sleep_for(100ms);
 	}
 }
 

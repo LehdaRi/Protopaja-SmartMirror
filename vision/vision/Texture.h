@@ -8,9 +8,6 @@
 
 namespace Vision {
 
-	class Cam;
-
-
 	class Texture {
 	public:
 		Texture(uint32_t width, uint32_t height, GLenum format = GL_RGBA,
@@ -29,7 +26,7 @@ namespace Vision {
 		unsigned height(void) const;
 
 		void loadFromFile(const std::string& fileName);
-		void updateFromCam(Cam& cam);
+		void update(void* data);
 
 	private:
 		GLuint		_textureId;

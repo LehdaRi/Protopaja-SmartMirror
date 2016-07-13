@@ -7,9 +7,11 @@
 #include "Kinect.h"
 #include "Event.h"
 
+#include <memory>
 #include <atomic>
 #include <mutex>
 #include <deque>
+#include <thread>
 
 
 #define QUAD(xPos, yPos, xSize, ySize) xPos, yPos, 0.0f,\
@@ -22,25 +24,27 @@
 
 namespace Vision {
 
-	class Event;
+	struct Event;
 
 	class Device {
 	private:
 		struct Env {
-			Shader		shader;
-			Texture		camTexture1;
-			Texture		camTexture2;
-			Texture		depthTexture;
-			Texture		colorTexture;
+			bool usingWindow;
+			std::unique_ptr<Shader>		shader;
+			std::unique_ptr<Texture>	camTexture1;
+			std::unique_ptr<Texture>	camTexture2;
+			std::unique_ptr<Texture>	depthTexture;
+			std::unique_ptr<Texture>	colorTexture;
 
 			GLuint		vertexArrayId;
 			GLuint		vertexBufferId;
 
-			Cam			cam1;
-			Cam			cam2;
-			Kinect		kinect;
+			bool usingCams;
+			std::unique_ptr<Cam>		cam1;
+			std::unique_ptr<Cam>		cam2;
+			std::unique_ptr<Kinect>		kinect;
 
-			Env(void);
+			Env(bool useCams, bool useWindow);
 		};
 
 	public:
@@ -49,7 +53,6 @@ namespace Vision {
 		int mainLoop(bool useCams = true, bool useWindow = true);
 		void terminate(void);
 
-		void update(Env& env);
 		void draw(Env& env);
 
 		bool pollEvent(Event& event);
@@ -61,8 +64,10 @@ namespace Vision {
 
 		std::deque<Event>	_eventQueue;
 		std::mutex			_eventMutex;
-
 		void addEvent(int type, int data);
+
+		std::thread				_camThread1;
+		std::thread				_camThread2;
 	};
 
 }

@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "Kinect.h"
 
+#include <chrono>
+#include <iostream>
+
 
 using namespace Vision;
 
@@ -55,7 +58,10 @@ Kinect::~Kinect(void) {
 		fprintf(stderr, "Error when closing kinect sensor\n");
 }
 
-void Kinect::operator()(Texture& depthTexture, Texture& colorTexture) {
+void Kinect::operator()(Texture* depthTexture, Texture* colorTexture) {
+	//std::chrono::time_point<std::chrono::system_clock> start, end;
+	//start = std::chrono::system_clock::now();
+
 	//	depth 
 	HRESULT hr = -1;
 	USHORT nDepthMinReliableDistance = 0;
@@ -71,13 +77,13 @@ void Kinect::operator()(Texture& depthTexture, Texture& colorTexture) {
 	if (SUCCEEDED(hr)) hr = _depthFrameData->get_DepthMinReliableDistance(&nDepthMinReliableDistance);
 	if (SUCCEEDED(hr)) hr = _depthFrameData->get_DepthMaxReliableDistance(&nDepthMaxReliableDistance);
 
-	if (SUCCEEDED(hr)) {
+	if (SUCCEEDED(hr) && depthTexture) {
 		if (SUCCEEDED(_depthFrameDescription->get_Height(&depthFrameHeight)) &&
 			SUCCEEDED(_depthFrameDescription->get_Width(&depthFrameWidth))) {
 			
 			hr = _depthFrameData->AccessUnderlyingBuffer(&depthBufferCapacity, &depthBuffer);
 			if (SUCCEEDED(hr)) {
-				glBindTexture(GL_TEXTURE_2D, depthTexture);
+				glBindTexture(GL_TEXTURE_2D, *depthTexture);
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_R16, depthFrameWidth, depthFrameHeight, 0,
 							 GL_RED, GL_UNSIGNED_SHORT, depthBuffer);
 			}
@@ -97,7 +103,7 @@ void Kinect::operator()(Texture& depthTexture, Texture& colorTexture) {
 
 	if (SUCCEEDED(hr)) hr = _colorFrameData->get_FrameDescription(&_colorFrameDescription);
 
-	if (SUCCEEDED(hr)) {
+	if (SUCCEEDED(hr) && colorTexture) {
 		if (SUCCEEDED(_colorFrameDescription->get_Height(&colorFrameHeight)) &&
 			SUCCEEDED(_colorFrameDescription->get_Width(&colorFrameWidth))) {
 
@@ -105,7 +111,7 @@ void Kinect::operator()(Texture& depthTexture, Texture& colorTexture) {
 			hr = _colorFrameData->CopyConvertedFrameDataToArray(colorFrameWidth * colorFrameHeight * 4 * sizeof(unsigned char),
 				&_colorFrameDataConverted[0], ColorImageFormat_Rgba);
 			if (SUCCEEDED(hr)) {
-				glBindTexture(GL_TEXTURE_2D, colorTexture);
+				glBindTexture(GL_TEXTURE_2D, *colorTexture);
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, colorFrameWidth, colorFrameHeight, 0,
 					GL_RGBA, GL_UNSIGNED_BYTE, &_colorFrameDataConverted[0]);
 			}
@@ -139,6 +145,10 @@ void Kinect::operator()(Texture& depthTexture, Texture& colorTexture) {
 		else
 			fprintf(stderr, "Error when releasing depth frame data\n");
 	}
+
+	//end = std::chrono::system_clock::now();
+	//std::chrono::duration<double> time = end - start;
+	//std::cout << "capturing kinect frames took: " << time.count() << "s\n";
 }
 
 

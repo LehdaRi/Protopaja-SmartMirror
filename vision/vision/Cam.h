@@ -13,6 +13,7 @@
 namespace Vision {
 
 	class Texture;
+	class FaceRecognizer;
 
 	class Cam {
 	public:
@@ -27,6 +28,7 @@ namespace Vision {
 		unsigned height(void) const;
 
 		void writeToTexture(Texture& texture);
+		void detectFaces(FaceRecognizer& faceRecognizer);
 		//const cv::Mat& frame(void);
 
 	private:

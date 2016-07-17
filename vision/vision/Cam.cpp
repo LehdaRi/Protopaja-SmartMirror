@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "Cam.h"
 #include "Texture.h"
-
-#include <chrono>
+#include "FaceRecognizer.hpp"
 
 
 using namespace Vision;
@@ -51,16 +50,10 @@ void Cam::loop(void) {
 
 
 		//  read frame from webcam
-		//std::chrono::time_point<std::chrono::system_clock> start, end;
-		//start = std::chrono::system_clock::now();
 		if (!_cap.read(_frame) || _frame.empty()) { // read a new frame from video
 			std::cout << "Cannot read a frame from video stream" << std::endl;
 			return;
 		}
-
-		//end = std::chrono::system_clock::now();
-		//std::chrono::duration<double> time = end - start;
-		//std::cout << "capturing cam " << _camId << " frame took: " << time.count() << "s\n";
 
 		//	reading done
 		_read = false;
@@ -91,6 +84,13 @@ unsigned Cam::height(void) const {
 void Cam::writeToTexture(Texture& texture) {
 	std::lock_guard<std::mutex> lock(_mutex);
 	texture.update(_frame.data);
+}
+
+void Cam::detectFaces(FaceRecognizer& faceRecognizer) {
+	std::lock_guard<std::mutex> lock(_mutex);
+	if (_frame.empty())
+		return;
+	faceRecognizer.detectFaces(_frame);
 }
 
 /*

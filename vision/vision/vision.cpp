@@ -45,7 +45,7 @@ extern "C" {
 			return v->pollEvent(event);
 		}
 		catch (...) {
-			return -1;
+			return false;
 		}
 	}
 

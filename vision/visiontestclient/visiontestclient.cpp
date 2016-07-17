@@ -25,22 +25,6 @@ int main()
 		std::this_thread::sleep_for(100ms);
 	}
 
-
 	terminateVision(vision);
-
-	/*
-	Vision::Vision vision(true, true);
-
-	Vision::Event event;
-	for (bool running = true; running;) {
-		while (vision.pollEvent(&event)) {
-			printf("Polled event with type = %u and data = %u\n", event.type, event.data);
-			if (event.type == 4)
-				running = false;
-		}
-
-		std::this_thread::sleep_for(100ms);
-	}
-	*/
 }
 

@@ -4,7 +4,7 @@
 #include "config.h"
 
 
-namespace Vision {
+extern "C" {
 
 	struct VISION_API Event {
 		/**	type

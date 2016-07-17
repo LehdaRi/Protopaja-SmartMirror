@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include "Kinect.h"
 #include "Event.h"
+#include "FaceRecognizer.hpp"
 
 #include <memory>
 #include <atomic>
@@ -21,10 +22,14 @@
                                        xPos+xSize, yPos, 0.0f,\
                                        xPos+xSize, yPos+ySize, 0.0f
 
-
-namespace Vision {
+extern "C" {
 
 	struct Event;
+
+}
+
+
+namespace Vision {
 
 	class Device {
 	private:
@@ -60,14 +65,20 @@ namespace Vision {
 		void updateShader(Env& env);
 
 	private:
+		//	status
 		std::atomic<bool>	_terminating;
+		
+		//	threads for cams
+		std::thread			_camThread1;
+		std::thread			_camThread2;
 
+		//	events
 		std::deque<Event>	_eventQueue;
 		std::mutex			_eventMutex;
 		void addEvent(int type, int data);
 
-		std::thread				_camThread1;
-		std::thread				_camThread2;
+		//	face recognizer
+		FaceRecognizer		_faceRecognizer;
 	};
 
 }

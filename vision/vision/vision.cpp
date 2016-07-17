@@ -22,7 +22,31 @@ Vision::Vision::~Vision(void) {
 }
 
 bool Vision::Vision::pollEvent(Event* event) {
-	if (event)
+	if (event) {
 		return _device.pollEvent(*event);
+	}
 	return false;
+}
+
+
+extern "C" {
+	
+	VISION_HANDLE launchVision(bool useCams, bool useWindow) {
+		return new(std::nothrow) Vision::Vision(useCams, useWindow);
+	}
+
+	void terminateVision(VISION_HANDLE vision) {
+		delete (Vision::Vision*)vision;
+	}
+	
+	bool pollEvent(VISION_HANDLE vision, Event* event) {
+		try {
+			Vision::Vision* v = reinterpret_cast<Vision::Vision*>(vision);
+			return v->pollEvent(event);
+		}
+		catch (...) {
+			return false;
+		}
+	}
+
 }

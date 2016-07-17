@@ -12,17 +12,19 @@ int main()
 {
 	using namespace std::chrono_literals;
 
-	Vision::Vision vision(true, true);
+	VISION_HANDLE vision = launchVision(true, true);
 
-	Vision::Event event;
+	Event* event = new Event;
 	for (bool running = true; running;) {
-		while (vision.pollEvent(&event)) {
-			printf("Polled event with type = %u and data = %u\n", event.type, event.data);
-			if (event.type == 4)
+		while (pollEvent(vision, event)) {
+			printf("Polled event with type = %u and data = %u\n", event->type, event->data);
+			if (event->type == 4)
 				running = false;
 		}
 
 		std::this_thread::sleep_for(100ms);
 	}
+
+	terminateVision(vision);
 }
 

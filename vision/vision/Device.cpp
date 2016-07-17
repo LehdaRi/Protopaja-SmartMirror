@@ -28,7 +28,7 @@ Device::Device(void) :
 
 int Device::mainLoop(bool useCams, bool useWindow) {
 	std::unique_ptr<sf::Window> window(nullptr);
-
+	
 	if (useWindow) {
 		//	init window
 		window.reset(new sf::Window(sf::VideoMode(1440, 810), "Vision", sf::Style::Default,
@@ -42,7 +42,7 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 			return -1;
 		}
 	}
-
+	
 	//	init enviroment
 	std::unique_ptr<Env> env(new Env(useCams, useWindow));
 
@@ -72,17 +72,20 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 	}
 	
 	//	BEGIN OF TEMP
-	int64_t loopCounter = 0;
+	/*int64_t loopCounter = 0;
 	std::chrono::duration<double> loopTimeSum(0.0);
 	std::chrono::duration<double> loopTimeMin(100000000.0);
-	std::chrono::duration<double> loopTimeMax(0.0);
+	std::chrono::duration<double> loopTimeMax(0.0);*/
 	//	END OF TEMP
 
 	if (useWindow) {
 		while (window->isOpen())
 		{
-			std::chrono::time_point<std::chrono::system_clock> start, end;
+			//	BEGIN OF TEMP
+			/*std::chrono::time_point<std::chrono::system_clock> start, end;
 			start = std::chrono::system_clock::now();
+			*/
+			//	END OF TEMP
 
 			// Event processing
 			sf::Event event;
@@ -122,8 +125,11 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 			}
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+			
 			(*env->kinect)(env->depthTexture.get(), env->colorTexture.get());
+
+			env->cam1->detectFaces(_faceRecognizer);
+			env->cam2->detectFaces(_faceRecognizer);
 
 			draw(*env);
 
@@ -131,7 +137,7 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 				env->cam1->read();
 				env->cam2->read();
 			}
-
+			
 			window->display();
 
 			if (_terminating) {
@@ -147,12 +153,11 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 
 
 			//	BEGIN OF TEMP
-			end = std::chrono::system_clock::now();
+			/*end = std::chrono::system_clock::now();
 			std::chrono::duration<double> time = end - start;
 			loopTimeSum += time;
 			if (time < loopTimeMin) loopTimeMin = time;
 			if (time > loopTimeMax) loopTimeMax = time;
-
 
 			if (++loopCounter > 30) {
 				std::cout << "Cycle average: " << loopTimeSum.count()/loopCounter << "s, min: "
@@ -161,7 +166,7 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 				loopTimeMin = std::chrono::duration<double>(100000000.0);
 				loopTimeMax = std::chrono::duration<double>(0.0);
 				loopCounter = 0;
-			}
+			}*/
 			//	END OF TEMP
 		}
 	}

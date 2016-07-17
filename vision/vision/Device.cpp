@@ -28,7 +28,7 @@ Device::Device(void) :
 
 int Device::mainLoop(bool useCams, bool useWindow) {
 	std::unique_ptr<sf::Window> window(nullptr);
-
+	
 	if (useWindow) {
 		//	init window
 		window.reset(new sf::Window(sf::VideoMode(1440, 810), "Vision", sf::Style::Default,
@@ -42,7 +42,7 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 			return -1;
 		}
 	}
-
+	/*
 	//	init enviroment
 	std::unique_ptr<Env> env(new Env(useCams, useWindow));
 
@@ -69,7 +69,7 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 	if (useCams) {
 		_camThread1 = std::thread(&Cam::loop, env->cam1.get());
 		_camThread2 = std::thread(&Cam::loop, env->cam2.get());
-	}
+	}*/
 	
 	//	BEGIN OF TEMP
 	int64_t loopCounter = 0;
@@ -94,7 +94,7 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 				else if (event.type == sf::Event::KeyPressed) {
 					switch (event.key.code) {
 					case sf::Keyboard::A:
-						updateShader(*env);
+						//updateShader(*env);
 						break;
 					case sf::Keyboard::Q:
 						addEvent(4, 0);
@@ -122,7 +122,7 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 			}
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+			/*
 			(*env->kinect)(env->depthTexture.get(), env->colorTexture.get());
 
 			draw(*env);
@@ -131,17 +131,17 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 				env->cam1->read();
 				env->cam2->read();
 			}
-
+			*/
 			window->display();
 
 			if (_terminating) {
-				if (useCams) {
+				/*if (useCams) {
 					env->cam1->terminate();
 					env->cam2->terminate();
 					_camThread1.join();
 					_camThread2.join();
 					printf("Cam threads joined\n");
-				}
+				}*/
 				window->close();
 			}
 
@@ -153,7 +153,7 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 			if (time < loopTimeMin) loopTimeMin = time;
 			if (time > loopTimeMax) loopTimeMax = time;
 
-
+			/*
 			if (++loopCounter > 30) {
 				std::cout << "Cycle average: " << loopTimeSum.count()/loopCounter << "s, min: "
 					      << loopTimeMin.count() << "s, max: " << loopTimeMax.count() << "s\n";
@@ -161,7 +161,7 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 				loopTimeMin = std::chrono::duration<double>(100000000.0);
 				loopTimeMax = std::chrono::duration<double>(0.0);
 				loopCounter = 0;
-			}
+			}*/
 			//	END OF TEMP
 		}
 	}

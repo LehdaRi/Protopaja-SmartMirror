@@ -4,9 +4,9 @@
 #include "config.h"
 
 
-namespace Vision {
+extern "C" {
 
-	struct VISION_API Event {
+	struct Event {
 		/**	type
 		*	0:	invalid type
 		*	1:	person entered

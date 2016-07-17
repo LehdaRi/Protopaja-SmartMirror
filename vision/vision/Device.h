@@ -21,10 +21,14 @@
                                        xPos+xSize, yPos, 0.0f,\
                                        xPos+xSize, yPos+ySize, 0.0f
 
-
-namespace Vision {
+extern "C" {
 
 	struct Event;
+
+}
+
+
+namespace Vision {
 
 	class Device {
 	private:

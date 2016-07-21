@@ -1,43 +1,46 @@
 from tkinter import*
 
-from Config import*
+import Cfg
 
-import App_Time
-from GUI import*
+import User_Control
 import Debugger
+import AppControl
 
 
 
 
 def Main():
-	global root
 
-	root = GUIC()
+	Cfg.root = Tk()
+	Cfg.root.geometry('%dx%d+%d+%d' % (Cfg.root.winfo_screenwidth(), Cfg.root.winfo_screenheight(), 0, 0))
+	Cfg.root.attributes('-fullscreen', True)
+	Cfg.root.config(bg="#000000")
 	# Bind keyboard keys.
-	root.bind("<F1>", Debugger.DebugSwitch)	# Bind F1 Used for debugger window swiching
-	root.grid()
+	Cfg.root.bind("<F1>", Debugger.DebugSwitch)	# Bind F1 Used for debugger window swiching
+	Cfg.root.grid()
 
 
 # Start delayed loops
-	root.after(40, LoopHandler40)
-	root.after(1000, LoopHandler1000)
-	root.after(60000, LoopHandler60000)
-	root.mainloop()
+	Cfg.root.after(40, LoopHandler40)
+	Cfg.root.after(1000, LoopHandler1000)
+	Cfg.root.after(60000, LoopHandler60000)
+	Cfg.root.mainloop()
 
 def LoopHandler40():
-	for i in app_list:
+	for i in Cfg.app_list:
 		i.loophandler40()
-	root.after(40, LoopHandler40)
+	Cfg.root.after(16, LoopHandler40)
+	
 	
 def LoopHandler1000():
-	for i in app_list:
+	for i in Cfg.app_list:
 		i.loophandler1000()
-	root.after(1000, LoopHandler1000)	
+	Cfg.root.after(1000, LoopHandler1000)	
 	
 def LoopHandler60000():
-	for i in app_list:
+	for i in Cfg.app_list:
 		i.loophandler60000()
-	root.after(60000, LoopHandler60000)	
+	Cfg.root.after(60000, LoopHandler60000)	
 	
 			
 

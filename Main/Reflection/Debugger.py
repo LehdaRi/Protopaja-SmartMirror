@@ -2,25 +2,24 @@ from tkinter import*
 
 import AppControl
 import User_Control
-from Config import*
+import Cfg
 
 def DebugSwitch(event):	# Open or close the debugger window
-	global debugger
 
 	try:	# If Debugger window can be destroyed, do so...
-		debugger.destroy()
-		debugger = None
+		Cfg.debugger.destroy()
+		Cfg.debugger = None
 
 	except:	# Otherwise create the debugger window...
 
 	# Create Toplevel window for the debugger
-		debugger = Toplevel()
-		debugger.title("Reflection Debugger")
-		debugger.config(bg="#C0C0C0")
-		debugger.bind("<F1>", DebugSwitch)
+		Cfg.debugger = Toplevel()
+		Cfg.debugger.title("Reflection Debugger")
+		Cfg.debugger.config(bg="#C0C0C0")
+		Cfg.debugger.bind("<F1>", DebugSwitch)
 
 	# Create System Frame
-		systemframe = LabelFrame(debugger, text="System")
+		systemframe = LabelFrame(Cfg.debugger, text="System")
 		systemframe.pack( side = LEFT, fill = Y  )
 
 			# Create background inverting button
@@ -32,25 +31,25 @@ def DebugSwitch(event):	# Open or close the debugger window
 		sfb_login.pack( side = TOP, fill = X )
 
 	# Create Task Controller
-		moveframe = LabelFrame(debugger, text="Move app")
+		moveframe = LabelFrame(Cfg.debugger, text="Move app")
 		moveframe.pack( side = LEFT, fill = Y   )
 
 			# Create place buttons
-		cfb_NW = Button(moveframe, text = "NW" , command = lambda: App_Move(NW))
+		cfb_NW = Button(moveframe, text = "NW" , command = lambda: AppControl.App_Move(app_list[taskbox.index(ACTIVE)],NW))
 		cfb_NW.grid( row = 0, column = 0 , ipadx=2 )
-		cfb_W = Button(moveframe, text = "W" , command = lambda: App_Move(W))
+		cfb_W = Button(moveframe, text = "W" , command = lambda: AppControl.App_Move(app_list[taskbox.index(ACTIVE)],W))
 		cfb_W.grid( row = 1, column = 0 , ipadx=6 )
-		cfb_SW = Button(moveframe, text = "SW" , command = lambda: App_Move(SW))
+		cfb_SW = Button(moveframe, text = "SW" , command = lambda: AppControl.App_Move(app_list[taskbox.index(ACTIVE)],SW))
 		cfb_SW.grid( row = 2, column = 0 , ipadx=4 )
-		cfb_NE = Button(moveframe, text = "NE" , command = lambda: App_Move(NE))
+		cfb_NE = Button(moveframe, text = "NE" , command = lambda: AppControl.App_Move(app_list[taskbox.index(ACTIVE)],NE))
 		cfb_NE.grid( row = 0, column = 1 , ipadx=4 )
-		cfb_E = Button(moveframe, text = "E" , command = lambda: App_Move(E))
+		cfb_E = Button(moveframe, text = "E" , command = lambda: AppControl.App_Move(app_list[taskbox.index(ACTIVE)],E))
 		cfb_E.grid( row = 1, column = 1 , ipadx=9 )
-		cfb_SE = Button(moveframe, text = "SE" , command = lambda: App_Move(SE))
+		cfb_SE = Button(moveframe, text = "SE" , command = lambda: AppControl.App_Move(app_list[taskbox.index(ACTIVE)],SE))
 		cfb_SE.grid( row = 2, column = 1 , ipadx=6 )
 
 	# Create Task Manager
-		taskframe = LabelFrame(debugger, text="Task manager")
+		taskframe = LabelFrame(Cfg.debugger, text="Task manager")
 		taskframe.pack( side = LEFT, fill = Y  )
 
 			 # Create new task button
@@ -67,14 +66,13 @@ def DebugSwitch(event):	# Open or close the debugger window
 		tfb_close.pack( side = TOP, fill = X )
 
 	# Make sure that the debugger is in the front
-		debugger.lift()
+		Cfg.debugger.lift()
 
 
 
 def Fill_Manager(taskbox):
-	global app_list
 	
-	for i in app_list:
+	for i in Cfg.app_list:
 		taskbox.insert(END, i.name)
 
 
@@ -86,15 +84,26 @@ def SysBgInvert():
 	pass
 	
 def Task_New():
-	global apps
+
 
 	RunWin = Toplevel()
-	RunButtons = []
 
-	for i in apps:
-		print(i)
-		RunButtons.append(Button(RunWin, text=i, command = lambda i=i: AppControl.Place_App(i,32,32)))
-		RunButtons[-1].pack(side = TOP, fill = X)
+	appsbox = Listbox(RunWin)
+	appsbox.pack(side = LEFT)
+	for i in Cfg.apps:
+		appsbox.insert(END, i)
+
+	placeframe = Frame(RunWin)
+	placeframe.pack(side = LEFT)
+	placeNE = Button(placeframe, text="NE", command = lambda: AppControl.Place_App_Corner(Cfg.apps[appsbox.index(ACTIVE)],"NE"))
+	placeSE = Button(placeframe, text="SE", command = lambda: AppControl.Place_App_Corner(Cfg.apps[appsbox.index(ACTIVE)],"SE"))
+	placeSW = Button(placeframe, text="SW", command = lambda: AppControl.Place_App_Corner(Cfg.apps[appsbox.index(ACTIVE)],"SW"))
+	placeNS = Button(placeframe, text="NW", command = lambda: AppControl.Place_App_Corner(Cfg.apps[appsbox.index(ACTIVE)],"NW"))
+	
+	placeNE.grid(row = 0, column = 1, ipadx=3)
+	placeSE.grid(row = 1, column = 1, ipadx=5)
+	placeSW.grid(row = 1, column = 0, ipadx=3)
+	placeNS.grid(row = 0, column = 0, ipadx=4)
 
 
 
@@ -104,22 +113,19 @@ def Task_Close(task):
 	
 
 def DebugClose():	# Close the Debugger window
-	global debugger
 
-	debugger.destroy()
-	debugger = None
+	Cfg.debugger.destroy()
+	Cfg.debugger = None
 
 def DebugAppBlack():
-	global app_list
 
 #	app_list[0].AppBGBlack()
-	for i in app_list:
+	for i in Cfg.app_list:
 		i.AppBGBlack()
 
 def DebugAppBlack():
-	global app_list
 
 #	app_list[0].AppBGWhite()
-	for i in app_list:
+	for i in Cfg.app_list:
 		i.AppBGWhite()
 

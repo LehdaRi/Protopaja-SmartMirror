@@ -1,4 +1,4 @@
-from Config import*
+import Cfg
 import copy
 import App_Time
 import App_Calendar
@@ -6,31 +6,106 @@ import App_Calendar
 
 # This function finds the next possible place to put the application and then puts it there
 # It searches down from the given Y coordinate
-def Place_App(app,X,Y):
-	global app_list
-	Xtry = copy.copy(X)
-	Ytry = copy.copy(Y)
 
-	if len(app_list) == 0:
-		Create_App(app, Xtry, Ytry)
+def Place_App_Corner(app,corner):
+	Cfg.root.update()
+	print(" ")
+
+	OFFSET = 32
+
+	Create_App(app, Cfg.root.winfo_screenwidth()*2, Cfg.root.winfo_screenheight()*2)
+	Xtry=OFFSET
+	Ytry=OFFSET
+	DIRECTION = 1
+
+	if corner[0] == "S":
+		Ytry = Cfg.root.winfo_screenheight()-OFFSET-Cfg.app_list[-1].hardheight
+		DIRECTION = -1
+
+	if corner[1] == "E":
+		Xtry = Cfg.root.winfo_screenwidth()-OFFSET-Cfg.app_list[-1].hardwidth
+	
+
+	Ytry = Search_FreePosition(Cfg.app_list[-1],Xtry,Ytry,DIRECTION)
+	print("   -- Placing app at: ",Xtry,Ytry)
+
+	if Ytry == 9000:
+		print("%ERROR 9000")
+		App_Close(Cfg.app_list[-1])
 	else:
-		for j in range(10):
-			j-=1
-			for i in app_list:
-				if not i.Y <= Ytry <= i.Y + i.winfo_height():
-					Create_App(app, Xtry, Ytry)
-					break
-				else:
-					Ytry = i.Y + i.winfo_height() + 32
+		Cfg.app_list[-1].Target_X = Xtry
+		Cfg.app_list[-1].Target_Y = Ytry
+		if corner[1] == "W":
+			print("Placing West")
+			Cfg.root.update()
+			Cfg.app_list[-1].place( x=Xtry-(OFFSET*2)-Cfg.app_list[-1].hardwidth, y=Ytry )
+		else:
+			print("Placing East")
+			Cfg.root.update()
+			Cfg.app_list[-1].place( x=Xtry+(OFFSET*2), y=Ytry )
+
+def App_Close(app):
+	target = Cfg.app_list.index(app)
+	app.destroy()
+	Cfg.app_list[target] = None
+	for i in Cfg.app_list:
+		if i == None:
+			Cfg.app_list.remove(None)
+
+
+def Check_Collision(TargetX,TargetY,app1,app2):
+# Check if objects on the same side of the screen
+	if app1 ==  app2:
+		return False
+	if (app2.winfo_x() < Cfg.root.winfo_screenwidth()/2 and \
+		TargetX < Cfg.root.winfo_screenwidth()/2) or \
+		(app2.winfo_x() > Cfg.root.winfo_screenwidth()/2 and \
+		TargetX > Cfg.root.winfo_screenwidth()/2):
+			# Check if either of the objects have conflicting Y edges
+		if app2.winfo_y() <= TargetY <= (app2.winfo_y() + app2.hardheight) or \
+			app2.winfo_y() <= (TargetY + app1.hardheight) <= (app2.winfo_y() + app2.hardheight) or \
+			TargetY <= app2.winfo_y() <= (TargetY + app1.hardheight) or \
+			TargetY <= (app2.winfo_y() + app2.hardheight) <= (TargetY + app1.hardheight):
+			return True
+		else:
+			return False
+	else:
+		return False
+
+def Search_FreePosition(app,TargetX,TargetY,direction):
+	OFFSET = 32
+	
+	for j in range(len(Cfg.app_list)):
+		collision = False
+		for i in Cfg.app_list:
+			collision = Check_Collision(TargetX, TargetY,app,i)
+			if collision:
+				break
+		if collision:	
+			if direction == 1:
+				TargetY = i.winfo_y()+i.hardheight+OFFSET
+				print(" & COLLISION & New TargetY: ",TargetY)
 			else:
-				continue
-			break
+				TargetY = i.winfo_y()-app.hardheight-OFFSET
+				print(" & COLLISION & New TargetY: ",TargetY)
+		else:
+			if TargetY + app.hardheight > Cfg.root.winfo_screenheight()-31 or \
+				TargetY < 31:
+				return 9000		
+			else:
+				print(" & NO COLLISIONS & ")
+				return TargetY
+
+
+	
+
 
 # This function is used to create applications at given coordintes
 # Add to this a new elif line for every new application created
 # The name string in the elif statement must be the same as in the apps list
 def Create_App(appname, X, Y):
+
 	if appname == "Clock":
-		app_list.append(App_Time.AppC_Time(root,X,Y))
+		Cfg.app_list.append(App_Time.AppC_Time(Cfg.root,X,Y))
 	elif appname == "Calendar":
-		app_list.append(App_Calendar.AppC_Calendar(root,X,Y))
+		Cfg.app_list.append(App_Calendar.AppC_Calendar(Cfg.root,X,Y))

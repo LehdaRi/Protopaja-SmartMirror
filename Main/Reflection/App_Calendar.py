@@ -1,23 +1,21 @@
 from tkinter import*
 
-from Config import*
+import Cfg
 
 import wifsm
 
 class AppC_Calendar(Frame):
 	def __init__(self, parent,X,Y):
-		global active_user
-		active_user = wifsm.User(0)
+
+		Cfg.active_user = wifsm.User(0)
 	#### Initiate object variables
 	# Variables for system operation
-		self.X = X
-		self.Y = Y
 		self.name = "Calendar"
 
 	# Class specific variables for object operation
 
 			# Get calendar entries
-		self.events = active_user.getCalendarEvents()
+		self.events = Cfg.active_user.getCalendarEvents()
 		self.divider=[]
 		self.CalendarEntries=[]
 		self.CalendarTimes=[]

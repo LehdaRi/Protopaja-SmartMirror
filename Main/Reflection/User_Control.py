@@ -1,8 +1,8 @@
-from Config import*
+import Cfg
 import wifsm
 
 def UserCreate():
 	pass
 
 def UserLogIn():
-	active_user = wifsm.User(0)
+	Cfg.active_user = wifsm.User(0)

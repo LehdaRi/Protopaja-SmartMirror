@@ -31,13 +31,10 @@
     <Compile Include="App_Time.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Config.py">
+    <Compile Include="Cfg.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Debugger.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUI.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Main.py" />

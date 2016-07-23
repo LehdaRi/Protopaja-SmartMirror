@@ -160,7 +160,7 @@
     <ClInclude Include="config.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="Event.h" />
-    <ClInclude Include="FaceRecognizer.hpp" />
+    <ClInclude Include="FaceRecognizer.h" />
     <ClInclude Include="Kinect.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Texture.h" />

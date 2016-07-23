@@ -15,18 +15,20 @@ namespace Vision {
 		        GLenum dataFormat = GL_RGBA, GLenum dataType = GL_UNSIGNED_BYTE);
 		~Texture(void);
 
-		operator GLuint() const;
-
 		Texture(Texture&&);
 		Texture& operator=(Texture&&);
 		Texture(const Texture& other) = delete;
 		Texture& operator=(const Texture& other) = delete;
 
+		operator GLuint() const;
+
+		void setSize(uint32_t width, uint32_t height);
+
 		unsigned width(void) const;
 		unsigned height(void) const;
 
 		void loadFromFile(const std::string& fileName);
-		void update(void* data);
+		void update(void* data, GLenum srcFormat, GLenum destFormat = GL_RGBA);
 
 	private:
 		GLuint		_textureId;

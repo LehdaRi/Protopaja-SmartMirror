@@ -7,19 +7,24 @@
 using namespace Vision;
 
 
-Device::Env::Env(bool useCams, bool useWindow) :
-	usingWindow		(useWindow),
-	shader			(useWindow ? new Shader("shaders/VS_Texture.glsl", "shaders/FS_Texture.glsl") : nullptr),
-	camTexture1		(useWindow ? new Texture(1920, 1080) : nullptr),
-	camTexture2		(useWindow ? new Texture(1920, 1080) : nullptr),
-	depthTexture	(useWindow ? new Texture(512, 424) : nullptr),
-	colorTexture	(useWindow ? new Texture(1920, 1080) : nullptr),
-	vertexArrayId	(0),
-	vertexBufferId	(0),
-	usingCams		(useCams),
-	cam1			(useCams ? new Cam(0, 1920, 1080, 30.0) : nullptr),
-	cam2			(useCams ? new Cam(1, 1920, 1080, 30.0) : nullptr),
-	kinect			(new Kinect())
+Device::Env::Env(bool useCams, bool useWindow, uint32_t camWidth, uint32_t camHeight) :
+	kinect					(new Kinect()),
+	kinectFaceRecognizer	(new FaceRecognizer(1080 * VISION_DEVICE_MINFEATURESIZESCALE)),
+
+	usingCams				(useCams),
+	cam1					(useCams ? new Cam(0, camWidth, camHeight, 30.0) : nullptr),
+	cam2					(useCams ? new Cam(1, camWidth, camHeight, 30.0) : nullptr),
+	camFaceRecognizer1		(useCams ? new FaceRecognizer(cam1->height() * VISION_DEVICE_MINFEATURESIZESCALE) : nullptr),
+	camFaceRecognizer2		(useCams ? new FaceRecognizer(cam2->height() * VISION_DEVICE_MINFEATURESIZESCALE) : nullptr),
+	
+	usingWindow				(useWindow),
+	shader					(useWindow ? new Shader("shaders/VS_Texture.glsl", "shaders/FS_Texture.glsl") : nullptr),
+	depthTexture			(useWindow ? new Texture(512, 424) : nullptr),
+	colorTexture			(useWindow ? new Texture(1920, 1080) : nullptr),
+	camTexture1				(useWindow && useCams ? new Texture(cam1->width(), cam1->height()) : nullptr),
+	camTexture2				(useWindow && useCams ? new Texture(cam2->width(), cam2->height()) : nullptr),
+	vertexArrayId			(0),
+	vertexBufferId			(0)
 {}
 
 Device::Device(void) :
@@ -44,7 +49,7 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 	}
 	
 	//	init enviroment
-	std::unique_ptr<Env> env(new Env(useCams, useWindow));
+	std::unique_ptr<Env> env(new Env(useCams, useWindow, 1920, 1080));
 
 	if (useWindow) {
 		//	init canvas
@@ -69,6 +74,8 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 	if (useCams) {
 		_camThread1 = std::thread(&Cam::loop, env->cam1.get());
 		_camThread2 = std::thread(&Cam::loop, env->cam2.get());
+		//env->camTexture1->setSize(env->cam1->width(), env->cam1->height());
+		//env->camTexture2->setSize(env->cam2->width(), env->cam2->height());
 	}
 	
 	//	BEGIN OF TEMP
@@ -126,10 +133,14 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			
-			(*env->kinect)(env->depthTexture.get(), env->colorTexture.get());
+			(*env->kinect)(env->depthTexture.get());
+			env->kinect->detectFaces(*env->kinectFaceRecognizer);
+			env->kinect->writeColorToTexture(*env->colorTexture);
 
-			env->cam1->detectFaces(_faceRecognizer);
-			env->cam2->detectFaces(_faceRecognizer);
+			if (useCams) {
+				env->cam1->detectFaces(*env->camFaceRecognizer1);
+				env->cam2->detectFaces(*env->camFaceRecognizer2);
+			}
 
 			draw(*env);
 

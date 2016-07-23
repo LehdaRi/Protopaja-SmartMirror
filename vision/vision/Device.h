@@ -6,7 +6,7 @@
 #include "Texture.h"
 #include "Kinect.h"
 #include "Event.h"
-#include "FaceRecognizer.hpp"
+#include "FaceRecognizer.h"
 
 #include <memory>
 #include <atomic>
@@ -34,22 +34,28 @@ namespace Vision {
 	class Device {
 	private:
 		struct Env {
+			std::unique_ptr<Kinect>			kinect;
+			std::unique_ptr<FaceRecognizer>	kinectFaceRecognizer;
+
+			bool usingCams;
+			std::unique_ptr<Cam>			cam1;
+			std::unique_ptr<Cam>			cam2;
+			std::unique_ptr<FaceRecognizer>	camFaceRecognizer1;
+			std::unique_ptr<FaceRecognizer>	camFaceRecognizer2;
+
 			bool usingWindow;
 			std::unique_ptr<Shader>		shader;
-			std::unique_ptr<Texture>	camTexture1;
-			std::unique_ptr<Texture>	camTexture2;
 			std::unique_ptr<Texture>	depthTexture;
 			std::unique_ptr<Texture>	colorTexture;
+			std::unique_ptr<Texture>	camTexture1;
+			std::unique_ptr<Texture>	camTexture2;
 
 			GLuint		vertexArrayId;
 			GLuint		vertexBufferId;
 
-			bool usingCams;
-			std::unique_ptr<Cam>		cam1;
-			std::unique_ptr<Cam>		cam2;
-			std::unique_ptr<Kinect>		kinect;
-
-			Env(bool useCams, bool useWindow);
+			Env(bool useCams, bool useWindow,
+			    uint32_t camWidth	= 1920,
+			    uint32_t camHeight	= 1080);
 		};
 
 	public:
@@ -76,9 +82,6 @@ namespace Vision {
 		std::deque<Event>	_eventQueue;
 		std::mutex			_eventMutex;
 		void addEvent(int type, int data);
-
-		//	face recognizer
-		FaceRecognizer		_faceRecognizer;
 	};
 
 }

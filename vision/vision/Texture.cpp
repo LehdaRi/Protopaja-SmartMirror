@@ -53,6 +53,11 @@ Texture::operator GLuint() const {
 	return _textureId;
 }
 
+void Texture::setSize(uint32_t width, uint32_t height) {
+	_width = width;
+	_height = height;
+}
+
 unsigned Texture::width(void) const {
 	return _width;
 }
@@ -73,9 +78,9 @@ void Texture::loadFromFile(const std::string& fileName) {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, is.x, is.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr());
 }
 
-void Texture::update(void* data) {
+void Texture::update(void* data, GLenum srcFormat, GLenum destFormat) {
 	glBindTexture(GL_TEXTURE_2D, _textureId);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0,
-	             GL_BGR, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, destFormat, _width, _height, 0,
+		srcFormat, GL_UNSIGNED_BYTE, data);
 }

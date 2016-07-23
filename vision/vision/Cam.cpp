@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Cam.h"
 #include "Texture.h"
-#include "FaceRecognizer.hpp"
+#include "FaceRecognizer.h"
 
 
 using namespace Vision;
@@ -83,7 +83,7 @@ unsigned Cam::height(void) const {
 
 void Cam::writeToTexture(Texture& texture) {
 	std::lock_guard<std::mutex> lock(_mutex);
-	texture.update(_frame.data);
+	texture.update(_frame.data, GL_BGR);
 }
 
 void Cam::detectFaces(FaceRecognizer& faceRecognizer) {

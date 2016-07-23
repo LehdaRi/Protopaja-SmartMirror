@@ -3,6 +3,7 @@
 
 #include <Windows.h>
 #include <Kinect.h>
+#include <opencv2/opencv.hpp>
 #include <vector>
 
 #include "Texture.h"
@@ -10,6 +11,7 @@
 
 namespace Vision {
 
+	class FaceRecognizer;
 	
 	class Kinect {
 	public:
@@ -19,7 +21,10 @@ namespace Vision {
 		Kinect(const Kinect&)				= delete;
 		Kinect& operator=(const Kinect&)	= delete;
 
-		void operator()(Texture* depthTexture, Texture* colorTexture);
+		void operator()(Texture* depthTexture);
+
+		void writeColorToTexture(Texture& texture);
+		void detectFaces(FaceRecognizer& faceRecognizer);
 
 	private:
 		IKinectSensor*			_sensor;
@@ -33,7 +38,7 @@ namespace Vision {
 		IColorFrameReader*		_colorFrameReader;
 		IColorFrame*			_colorFrameData;
 		IFrameDescription*		_colorFrameDescription;
-		std::vector<uint8_t>	_colorFrameDataConverted;
+		cv::Mat					_colorFrameMat;
 	};
 
 

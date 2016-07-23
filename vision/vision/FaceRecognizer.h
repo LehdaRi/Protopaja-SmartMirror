@@ -8,11 +8,15 @@ namespace Vision {
 
 	class FaceRecognizer {
 	public:
-		FaceRecognizer(void);
+		FaceRecognizer(double minFeatureSize = 100);
+
+		void setMinFeatureSize(double minFeatureSize);
 
 		void detectFaces(cv::Mat& frame);
 
 	private:
+		cv::Size				_minFeatureSize;
+
 		cv::CascadeClassifier	_faceCascade;
 		cv::Mat					_grayFrame;
 

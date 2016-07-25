@@ -61,9 +61,8 @@ class AppC_Time(Frame):
 		self.timelist[1].set(self.daylist[self.timestringlist[6]])
 		self.timelist[2].set("{:02d}.{:02d}.{:d}".format(self.timestringlist[2],self.timestringlist[1],self.timestringlist[0]))
 		
-
+	### Move animation
 		self.speedy = abs(self.Target_Y - self.winfo_y())/10
-
 		self.speedx = abs(self.Target_X - self.winfo_x())/10
 
 		if abs(self.Target_Y - self.winfo_y()) <= 2:
@@ -85,10 +84,6 @@ class AppC_Time(Frame):
 			self.Ymove=self.speedy
 		elif self.Target_Y == self.winfo_y():
 			self.Ymove=0
-
-
-		
-
 
 		self.place(x=self.winfo_x()+self.Xmove,y=self.winfo_y()+self.Ymove)
 

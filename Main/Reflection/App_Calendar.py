@@ -2,20 +2,29 @@ from tkinter import*
 
 import Cfg
 
-import wifsm
+import wifsm2
 
 class AppC_Calendar(Frame):
 	def __init__(self, parent,X,Y):
 
-		Cfg.active_user = wifsm.User(0)
 	#### Initiate object variables
 	# Variables for system operation
 		self.name = "Calendar"
+		self.Target_X = X
+		self.Target_Y = Y
+		self.Xmove=0
+		self.Ymove=0
+		self.speedy=2
+		self.speedx=2
+		self.hardheight = 138
+		self.hardwidth = 168
 
 	# Class specific variables for object operation
 
 			# Get calendar entries
-		self.events = Cfg.active_user.getCalendarEvents()
+		print(Cfg.active_user)
+		self.events = wifsm2.calendarList(Cfg.active_user)
+		print(self.events)
 		self.divider=[]
 		self.CalendarEntries=[]
 		self.CalendarTimes=[]
@@ -30,7 +39,7 @@ class AppC_Calendar(Frame):
 			# Create frame for the app and place at given coordinates
 		Frame.__init__(self, parent)
 		Frame.config(self, bg="#000000")
-		self.place(x=self.X, y=self.Y)
+		self.place(x=X, y=Y)
 		
 			# Create and fill labels to display text
 		self.title = Label(self, text = "Upcoming Events", fg="white", bg="Black", font=("Helvetica", 16))
@@ -67,7 +76,32 @@ class AppC_Calendar(Frame):
 	### End of startup code
 
 	def loophandler40(self):
-		pass
+
+		### Move animation
+		self.speedy = abs(self.Target_Y - self.winfo_y())/10
+		self.speedx = abs(self.Target_X - self.winfo_x())/10
+
+		if abs(self.Target_Y - self.winfo_y()) <= 2:
+			self.speedy = abs(self.Target_Y - self.winfo_y())
+
+		if abs(self.Target_X - self.winfo_x()) <= 2:
+			self.speedx = abs(self.Target_X - self.winfo_x())
+
+		if self.Target_X < self.winfo_x():
+			self.Xmove=-self.speedx
+		elif self.Target_X > self.winfo_x():
+			self.Xmove=self.speedx
+		elif self.Target_X == self.winfo_x():
+			self.Xmove=0
+
+		if self.Target_Y < self.winfo_y():
+			self.Ymove=-self.speedy
+		elif self.Target_Y > self.winfo_y():
+			self.Ymove=self.speedy
+		elif self.Target_Y == self.winfo_y():
+			self.Ymove=0
+
+		self.place(x=self.winfo_x()+self.Xmove,y=self.winfo_y()+self.Ymove)
 
 	def loophandler1000(self):
 		pass

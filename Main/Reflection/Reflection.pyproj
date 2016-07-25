@@ -22,10 +22,14 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="api_init3.py" />
     <Compile Include="App_Calendar.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppControl.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="App_Template.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="App_Time.py">
@@ -41,7 +45,7 @@
     <Compile Include="User_Control.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="wifsm.py" />
+    <Compile Include="wifsm2.py" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

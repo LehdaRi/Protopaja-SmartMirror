@@ -3,8 +3,13 @@ from tkinter import*
 import AppControl
 import User_Control
 import Cfg
+import wifsm2
+import api_init3
+
+
 
 def DebugSwitch(event):	# Open or close the debugger window
+
 
 	try:	# If Debugger window can be destroyed, do so...
 		Cfg.debugger.destroy()
@@ -17,6 +22,7 @@ def DebugSwitch(event):	# Open or close the debugger window
 		Cfg.debugger.title("Reflection Debugger")
 		Cfg.debugger.config(bg="#C0C0C0")
 		Cfg.debugger.bind("<F1>", DebugSwitch)
+		userslist = None
 
 	# Create System Frame
 		systemframe = LabelFrame(Cfg.debugger, text="System")
@@ -25,10 +31,21 @@ def DebugSwitch(event):	# Open or close the debugger window
 			# Create background inverting button
 		sfb_invert = Button(systemframe, text="Invert background", command=SysBgInvert)
 		sfb_invert.pack( side = TOP, fill = X )
-		sfb_newuser = Button(systemframe, text="New user", command=User_Control.UserCreate)
+		sfb_deluser = Button(systemframe, text = "Delete users", command = api_init3.destroyUsers)
+		sfb_deluser.pack( side = TOP, fill = X )
+		sfb_username = Entry(systemframe)
+		sfb_username.pack( side = TOP, fill = X )
+		sfb_newuser = Button(systemframe, text="New user", command= lambda: User_Control.UserCreate(sfb_username.get()))
 		sfb_newuser.pack( side = TOP, fill = X )
-		sfb_login = Button(systemframe, text="Log in user", command=User_Control.UserLogIn)
+		sfb_login = Button(systemframe, text="Log in user", command = lambda: User_Control.UserLogIn(userslist.index(ACTIVE)))
 		sfb_login.pack( side = TOP, fill = X )
+
+	# Create Users Frame
+		usersframe = LabelFrame(Cfg.debugger, text="Users")
+		usersframe.pack( side = LEFT, fill = Y   )
+		userslist = Listbox(usersframe)
+		userslist.pack(side = TOP)
+		Users_Fill(userslist)
 
 	# Create Task Controller
 		moveframe = LabelFrame(Cfg.debugger, text="Move app")
@@ -68,6 +85,11 @@ def DebugSwitch(event):	# Open or close the debugger window
 	# Make sure that the debugger is in the front
 		Cfg.debugger.lift()
 
+def Users_Fill(listbox):
+	listbox.delete(0, END) 
+	j=wifsm2.getUsers()
+	for i in j:
+		listbox.insert(END, i[0])
 
 
 def Fill_Manager(taskbox):
@@ -87,6 +109,9 @@ def Task_New():
 
 
 	RunWin = Toplevel()
+	RunWin.title("Run APP")
+	RunWin.config(bg="#C0C0C0")
+
 
 	appsbox = Listbox(RunWin)
 	appsbox.pack(side = LEFT)

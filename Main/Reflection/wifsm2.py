@@ -135,11 +135,14 @@ def calendarList(user, event_numb=5):
 	elist = []
 	for event in events:
 		stuff = {}
-		stuff["start"] = event["start"]["dateTime"]
-		stuff["end"] = event["end"]["dateTime"]
+		junk = event["start"]["dateTime"]
+		stuff["start"] = [junk[:4], junk[5:7], junk[8:10],junk[11:13],junk[14:16],junk[17:19]]
+		junk = event["end"]["dateTime"]
+		stuff["end"] = [junk[:4], junk[5:7], junk[8:10],junk[11:13],junk[14:16],junk[17:19]]
 		stuff["title"] = event['summary']
 		elist.append(stuff)
-		
+	
+	print(elist)	
 	return elist
 	
 def getRuokalistat():

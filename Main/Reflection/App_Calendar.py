@@ -16,8 +16,8 @@ class AppC_Calendar(Frame):
 		self.Ymove=0
 		self.speedy=2
 		self.speedx=2
-		self.hardheight = 138
-		self.hardwidth = 168
+		self.hardheight = 337
+		self.hardwidth = 200
 
 	# Class specific variables for object operation
 
@@ -46,14 +46,28 @@ class AppC_Calendar(Frame):
 		self.title.pack()
 		self.divider.append(Frame(self, bg="White", height = 3, width = 200))
 		self.divider[-1].pack()
-		for i in self.events:
+
+		if len(self.events) == 0:
+			self.none = Label(self, text = "Calendar empty", fg="white", bg="Black", font=("Helvetica", 16))
+			self.none.pack()
+
+		for j in range(len(self.events)):
+			if j == 0:
+				break
+			i = self.events[j]
 			junk = i["start"]
+			if j > 0:
+				junk2 = self.events[j]["start"]
+			else:
+				junk2 = [0,0,0]
+			
 		# Create frame to hold the calendar entry
 			self.CalendarEntries.append(Frame(self, bg="Black"))
 			self.CalendarEntries[-1].pack()
 				# Create label with the date
-			self.CalendarTimes.append(Label(self.CalendarEntries[-1], text = junk[2]+"."+junk[1]+"."+junk[0], fg="white", bg = "black", font=("Helvetica", 12)))
-			self.CalendarTimes[-1].grid(row=0, columnspan=2, sticky=W)
+			if (j == 0) or not (junk[2]==junk2[2] and junk[1]==junk2[1] and junk[0] == junk2[0]):
+				self.CalendarTimes.append(Label(self.CalendarEntries[-1], text = junk[2]+"."+junk[1]+"."+junk[0], fg="white", bg = "black", font=("Helvetica", 12)))
+				self.CalendarTimes[-1].grid(row=0, columnspan=2, sticky=W)
 				# Create a divider line
 			self.divider.append(Frame(self.CalendarEntries[-1], bg="White", height = 1, width = 200))
 			self.divider[-1].grid(row=1, columnspan=2)
@@ -71,6 +85,7 @@ class AppC_Calendar(Frame):
 				# Create the final divider line
 			self.divider.append(Frame(self.CalendarEntries[-1], bg="White", height = 3, width = 200))
 			self.divider[-1].grid(row=4, columnspan=2)
+
 
 
 	### End of startup code

@@ -8,8 +8,14 @@
 #include <thread>
 
 
+int trainingTest(void) {
+	return cnnTrainingTest();
+}
+
 int main()
 {
+	//return trainingTest();
+
 	using namespace std::chrono_literals;
 
 	VISION_HANDLE vision = launchVision(true, true);

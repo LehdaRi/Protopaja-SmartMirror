@@ -49,4 +49,12 @@ extern "C" {
 		}
 	}
 
+	int cnnTrainingTest(void) {
+		Vision::CNNTrainer trainer;
+		trainer.train();
+		trainer.test();
+
+		return 0;
+	}
+
 }

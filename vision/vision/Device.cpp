@@ -79,19 +79,18 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 	}
 	
 	//	BEGIN OF TEMP
-	/*int64_t loopCounter = 0;
+	int64_t loopCounter = 0;
 	std::chrono::duration<double> loopTimeSum(0.0);
 	std::chrono::duration<double> loopTimeMin(100000000.0);
-	std::chrono::duration<double> loopTimeMax(0.0);*/
+	std::chrono::duration<double> loopTimeMax(0.0);
 	//	END OF TEMP
 
 	if (useWindow) {
 		while (window->isOpen())
 		{
 			//	BEGIN OF TEMP
-			/*std::chrono::time_point<std::chrono::system_clock> start, end;
+			std::chrono::time_point<std::chrono::system_clock> start, end;
 			start = std::chrono::system_clock::now();
-			*/
 			//	END OF TEMP
 
 			// Event processing
@@ -164,7 +163,7 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 
 
 			//	BEGIN OF TEMP
-			/*end = std::chrono::system_clock::now();
+			end = std::chrono::system_clock::now();
 			std::chrono::duration<double> time = end - start;
 			loopTimeSum += time;
 			if (time < loopTimeMin) loopTimeMin = time;
@@ -177,7 +176,7 @@ int Device::mainLoop(bool useCams, bool useWindow) {
 				loopTimeMin = std::chrono::duration<double>(100000000.0);
 				loopTimeMax = std::chrono::duration<double>(0.0);
 				loopCounter = 0;
-			}*/
+			}
 			//	END OF TEMP
 		}
 	}

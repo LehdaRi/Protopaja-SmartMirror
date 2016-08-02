@@ -6,6 +6,8 @@
 
 #include "Device.h"
 
+#include "CNNTrainer.h"	//	TEMP
+
 
 namespace Vision
 {
@@ -37,4 +39,8 @@ extern "C" {
 
 	//	polls event and modifies given event object
 	bool VISION_API pollEvent(VISION_HANDLE vision, Event* event);
+
+
+	int VISION_API cnnTrainingTest(void);
+
 }

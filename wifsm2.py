@@ -1,4 +1,5 @@
 import urllib.request
+import urllib.parse
 import httplib2
 import string
 letters = string.printable + 'äöå'
@@ -12,6 +13,7 @@ from oauth2client.file import Storage
 from oauth2client import client
 from apiclient import discovery
 from apiclient.http import BatchHttpRequest
+	
 	
 def getHomeTimeline(user, tweet_numb=10):
 
@@ -135,139 +137,215 @@ def calendarList(user, event_numb=5):
 	elist = []
 	for event in events:
 		stuff = {}
-		stuff["start"] = event["start"]["dateTime"]
-		stuff["end"] = event["end"]["dateTime"]
+		junk = event["start"]["dateTime"]
+		stuff["start"] = [junk[:4], junk[5:7], junk[8:10],junk[11:13],junk[14:16],junk[17:19]]
+		junk = event["end"]["dateTime"]
+		stuff["end"] = [junk[:4], junk[5:7], junk[8:10],junk[11:13],junk[14:16],junk[17:19]]
 		stuff["title"] = event['summary']
 		elist.append(stuff)
-		
+	
+	print(elist)	
 	return elist
+	
+def getRuokalistatT():
+
+	url = 'http://www.lounasaika.net/api/v1/menus.json'
+	
+	req = urllib.request.Request(url)
+	response = urllib.request.urlopen(req)
+	str1 = '' 
+	for line in response:
+		a = line.decode('utf8')
+		str1 = str1 + a
+	
+	restaurants = re.findall(r'({"name":.*?"meals":.*?})', str1)
+	
+	foodlist = []
+	for restaurant in restaurants:
+		campus = ''.join(re.findall(r'"campus":"(.*?)"', restaurant))
+		ota = re.findall(r'[oO][tT][aA]', campus)
+		if ota:
+			dict1 = {}
+			dict1["name"] = ''.join(re.findall(r'"name":"(.*?)"', restaurant))
+			meals = ''.join(re.findall(r'"meals":{"fi":(.*?),"en"', restaurant))
+			#print(name + ' : ' + campus)
+			print('\n\n')
+			print(meals)
+			#print(restaurant)
+			
 	
 def getRuokalistat():
 	
 	response = urllib.request.urlopen('http://ruokalistat.net/')
+	
 	response = str(response.read())
 	
-	foods = []
+	foods = {}
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat1 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"Tietotekniikkatalo": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro')
+		food4.append(a)
+	foods["Tietotekniikkatalo"] = food4
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat2 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"Täffä": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro')
+		food4.append(a)
+	foods["Täffä"] = food4
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat3 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"Alvari": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro').replace('\\xc3\\x80', 'A')
+		food4.append(a)
+	foods["Alvari"] = food4
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat4 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"--": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro')
+		food4.append(a)
+	foods["--"] = food4
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat5 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"Sähkötekniikka": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro')
+		food4.append(a)
+	foods["Sähkötekniikka"] = food4
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat6 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"Kvarkki": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro')
+		food4.append(a)
+	foods["Kvarkki"] = food4
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat7 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"TUAS": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro')
+		food4.append(a)
+	foods["Tuas"] = food4
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat8 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"Electra": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro')
+		food4.append(a)
+	foods["Elektra"] = food4
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat9 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"Kasper": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro')
+		food4.append(a)
+	foods["Kasper"] = food4
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat10 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"Konetekniikka": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro')
+		food4.append(a)
+	foods["Konetekniikka"] = food4
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat11 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"Aalto Valimo": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro')
+		food4.append(a)
+	foods["Aalto Valimo"] = food4
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat12 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"Tietotie 6": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro')
+		food4.append(a)
+	foods["Tietotie 6"] = food4
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat13 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"VM5": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro')
+		food4.append(a)
+	foods["VM5"] = food4
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat14 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"Antell-ravintola Calori": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro')
+		food4.append(a)
+	foods["Antell-ravintola Calori"] = food4
 	
 	food1 = ''.join(re.findall(r'<!-- ruuat15 -->\\n(.*?)</td>', response))
 	food2 = re.findall(r'\\t(.*?)<br />', food1)
 	food3 = re.findall(r'\\n(.*?)<br />', food1)
 	for f in food3:
 		food2.append(f)
-	dict1 = {"Mau-kas": food2}
-	foods.append(dict1)
+	food4 = []
+	for f in food2:
+		a = f.replace('\\xc3\\xa4', 'ä').replace('\\xc3\\xb6', 'ö').replace('\\xe2\\x82\\xac', 'euro')
+		food4.append(a)
+	foods["Mau-kas"] = food4
 	
 	return foods
 	
@@ -284,6 +362,36 @@ def getNow(utc_add=3):
 	time = 'T'.join(time)
 	
 	return time
+	
+def getWeather(woeid=570736):
+	
+	url = "https://query.yahooapis.com/v1/public/yql"
+	
+	yql_query = "select * from weather.forecast where woeid=" + str(woeid) + " and u='c'"
+	
+	values = {'q': yql_query, 'format': 'json'}
+	
+	data = urllib.parse.urlencode(values)
+	data = data.encode('utf-8')
+	
+	req = urllib.request.Request(url, data)
+	response = str(urllib.request.urlopen(req).read())
+	
+	forecast = ''.join(re.findall(r'"forecast":\[(.*?)\],', response))
+	
+	forecastlist = re.findall(r'{(.*?)}', forecast)
+	weatherweek = []
+	for day in forecastlist:
+		
+		dict1 ={}
+		dict1["date"] = ''.join(re.findall(r'"date":"(.*?)"', day))
+		dict1["day"] = ''.join(re.findall(r'"day":"(.*?)"', day))
+		dict1["high"] = ''.join(re.findall(r'"high":"(.*?)"', day))
+		dict1["low"] = ''.join(re.findall(r'"low":"(.*?)"', day))
+		dict1["text"] = ''.join(re.findall(r'"text":"(.*?)"', day))
+		weatherweek.append(dict1)
+	
+	return weatherweek
 	
 def getUsers():
 	
@@ -311,4 +419,4 @@ def getUsers():
 	return users
 
 if __name__ == '__main__':
-	print("Four main functions: getHomeTimeline, emailList, calendarList, and getRuokalistat.")
+	pass

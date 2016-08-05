@@ -172,19 +172,7 @@ class Cursor(Frame):
 
 			self.place(x=self.winfo_x()+self.Xmove,y=self.winfo_y()+self.Ymove)
 
-		
-
-
-
-		"""
-	def PlaceImage(self):
-		self.picture = self.Frame[self.frame].zoom(1,self.TargetApp.hardheight)
-		self.cursor = Label(self, image = self.piczoomed, bg="#000000")
-		self.cursor.pack()
-		self.Target_Y = self.TargetApp.winfo_y()
-
-		self.place(x = self.Target_X, y = self.Target_Y)
-		"""
+	
 def CursorMove(dir):
 	if dir == "UP":
 		Cfg.cursor.CursorMoveUp()

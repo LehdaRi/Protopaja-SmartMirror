@@ -1,16 +1,22 @@
 from tkinter import*
+from ctypes import*
 
 import Cfg
-
+import Cursor
 import User_Control
 import Debugger
 import AppControl
+import dllhandler
+import wifsm2
+### Dll startup
 
 
 
 
 def Main():
+	dllhandler.StartVision()
 
+	### Initiate
 	Cfg.root = Tk()
 	Cfg.root.geometry('%dx%d+%d+%d' % (Cfg.root.winfo_screenwidth(), Cfg.root.winfo_screenheight(), 0, 0))
 	Cfg.root.attributes('-fullscreen', True)
@@ -24,18 +30,34 @@ def Main():
 	Cfg.root.after(40, LoopHandler40)
 	Cfg.root.after(1000, LoopHandler1000)
 	Cfg.root.after(60000, LoopHandler60000)
+	Cfg.root.after(1000, AppControl.Open_User_apps)
 	Cfg.root.mainloop()
 
+
+
 def LoopHandler40():
+	AppControl.App_List_Reorganize()
 	for i in Cfg.app_list:
 		i.loophandler40()
 	Cfg.root.after(16, LoopHandler40)
+
+	### Event Handler
+	Cfg.Events = dllhandler.ReadBuffer()
+	#print(Cfg.Events)
+
+	try:
+		Cfg.cursor.Draw()
+	except:
+		pass
+
+	
 	
 	
 def LoopHandler1000():
 	for i in Cfg.app_list:
 		i.loophandler1000()
 	Cfg.root.after(1000, LoopHandler1000)	
+	
 	
 def LoopHandler60000():
 	for i in Cfg.app_list:

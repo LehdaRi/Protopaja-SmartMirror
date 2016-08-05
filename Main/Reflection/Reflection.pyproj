@@ -29,16 +29,29 @@
     <Compile Include="AppControl.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="App_gmail.py" />
+    <Compile Include="App_Ruokalista.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="App_Template.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="App_Time.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="App_Weather.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Cfg.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Cursor.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Debugger.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dllhandler.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Main.py" />

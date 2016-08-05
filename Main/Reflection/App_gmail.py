@@ -17,9 +17,9 @@ class AppC_Gmail(Frame):
 		self.speedy=2
 		self.speedx=2
 		self.name = "Gmail"
-		self.hardheight = 530
-		self.hardwidth = 744
-		
+		self.hardheight = 304
+		self.hardwidth = 502
+		self.doomed = False
 
 	# Class specific variables for object operation
 		
@@ -38,44 +38,31 @@ class AppC_Gmail(Frame):
 		
 		response = wifsm2.emailList(Cfg.active_user, 10)
 	
-		image = PhotoImage(file = 'images\\2110816.png')
+		image = PhotoImage(file = 'images\\gmail.gif')
 		
-		Label(self, text = 'Gmail' , fg="white", bg="Black", font=("Helvetica", 16)).grid(row=0, column=1, columnspan=2, sticky=W)
+		#Label(self, text = 'Gmail' , fg="white", bg="Black", font=("Helvetica", 16)).grid(row=0, column=1, columnspan=2, sticky=W)
 		icon = Label(self, image=image, borderwidth=0, highlightthickness=0)
 		icon.image = image
 		icon.grid(row=0, column=0)
 		
-		row = 1
+		row = 0
 		for email in response:
-			name = ''.join(re.findall(r'<(.*?)>', email['From']))
-			s1 = ''
-			s2 = ''
-			s3 = ''
-			ccount = 1
-			for c in email["Subject"]:
-				if ccount <= 60:
-					s1 = s1 + c
-				elif ccount <= 120 and ccount > 60:
-					if ccount == 61 and c == ' ':
-						pass
-					else:
-						s2 = s2 + c
-				elif ccount <= 180 and ccount > 120:
-					if ccount == 121 and c == ' ':
-						pass
-					else:
-						s3 = s3 + c
-				ccount = ccount + 1
-			Label(self, text=name , fg="white", bg="Black", font=("Helvetica", 12)).grid(row=row, column=1, sticky=W)
-			Label(self, text=s1, fg="white", bg="Black", font=("Helvetica", 10)).grid(row=row, column=2, sticky=W)
-			row = row + 1
-			Label(self, text=s2, fg="white", bg="Black", font=("Helvetica", 10)).grid(row=row, column=2, sticky=W)
-			Label(self, text=email['Date'], fg="white", bg="Black", font=("Helvetica", 7)).grid(row=row, column=1, sticky=W)
-			if s3 != '':
-				row = row + 1	
-				Label(self, text=s3, fg="white", bg="Black", font=("Helvetica", 10)).grid(row=row, column=2, sticky=W)
-			row = row + 1		
-
+			#name = ''.join(re.findall(r'<(.*?)>', email['From']))+":        "
+			
+			email['Date']=email['Date'][:-6]
+			junk = email['From'].split("<")
+			name = junk[0]
+			Label(self, text=name , fg="white", bg="Black", font=("Helvetica", 12)).grid(row=1+(row*3), column=0, sticky=SW)
+			Label(self, text=email["Subject"],anchor=W, justify=LEFT,wraplength=400,\
+										 fg="white", bg="Black", font=("Helvetica", 12))\
+										 .grid(row=1+(row*3), column=1, sticky=W, rowspan = 2)
+	
+			Label(self, text=email['Date'], fg="white", bg="Black", font=("Helvetica", 8)).grid(row=2+(row*3), column=0, sticky=NW)
+			if row < 4:
+				Frame(self, bg="White", height = 1, width = 500).grid(row=3+(row*3), column=0, sticky=NW, columnspan = 2)
+			row = row + 1	
+			
+		
 	### End of startup code
 
 	def loophandler40(self):
@@ -83,6 +70,8 @@ class AppC_Gmail(Frame):
 
 
 		### Move animation handling below ###
+		self.Target_Y = int(self.Target_Y)
+		self.Target_X = int(self.Target_X)
 		self.speedy = abs(self.Target_Y - self.winfo_y())/10
 		self.speedx = abs(self.Target_X - self.winfo_x())/10
 
@@ -98,6 +87,8 @@ class AppC_Gmail(Frame):
 			self.Xmove=self.speedx
 		elif self.Target_X == self.winfo_x():
 			self.Xmove=0
+			if self.doomed ==  True:
+				self.destroy()
 
 		if self.Target_Y < self.winfo_y():
 			self.Ymove=-self.speedy

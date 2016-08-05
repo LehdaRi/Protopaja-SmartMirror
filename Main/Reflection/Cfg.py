@@ -5,6 +5,9 @@ app_list = []
 debugger = None
 root = None
 active_user = "Dummy"
+vision = None
+Events = []
+cursor = None
 
 # This list contains the names of all possible applications
-apps = ["Clock", "Calendar"]
+apps = ["Clock", "Calendar", "Ruokalista","Weather","Gmail"]

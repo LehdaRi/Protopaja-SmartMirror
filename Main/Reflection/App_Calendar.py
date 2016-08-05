@@ -22,9 +22,7 @@ class AppC_Calendar(Frame):
 	# Class specific variables for object operation
 
 			# Get calendar entries
-		print(Cfg.active_user)
-		self.events = wifsm2.calendarList(Cfg.active_user)
-		print(self.events)
+		self.events = wifsm2.calendarList(Cfg.active_user,event_numb=5)
 		self.divider=[]
 		self.CalendarEntries=[]
 		self.CalendarTimes=[]
@@ -47,13 +45,13 @@ class AppC_Calendar(Frame):
 		self.divider.append(Frame(self, bg="White", height = 3, width = 200))
 		self.divider[-1].pack()
 
+		for i in self.events:
+			print(i)
 		if len(self.events) == 0:
 			self.none = Label(self, text = "Calendar empty", fg="white", bg="Black", font=("Helvetica", 16))
 			self.none.pack()
 
 		for j in range(len(self.events)):
-			if j == 0:
-				break
 			i = self.events[j]
 			junk = i["start"]
 			if j > 0:
@@ -89,10 +87,17 @@ class AppC_Calendar(Frame):
 
 
 	### End of startup code
-
+	def exfiltrate(self):
+		if self.winfo_x() < Cfg.root.winfo_screenwidth()/2:
+			self.Target_X = self.winfo_x()-32- 32-self.hardwidth
+		else:
+			self.Target_X = self.winfo_x() + 32 + 32 + self.hardwidth
+		self.doomed = True
 	def loophandler40(self):
 
 		### Move animation
+		self.Target_Y = int(self.Target_Y)
+		self.Target_X = int(self.Target_X)
 		self.speedy = abs(self.Target_Y - self.winfo_y())/10
 		self.speedx = abs(self.Target_X - self.winfo_x())/10
 
@@ -108,6 +113,8 @@ class AppC_Calendar(Frame):
 			self.Xmove=self.speedx
 		elif self.Target_X == self.winfo_x():
 			self.Xmove=0
+			if self.doomed ==  True:
+				self.destroy()
 
 		if self.Target_Y < self.winfo_y():
 			self.Ymove=-self.speedy

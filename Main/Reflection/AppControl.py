@@ -2,14 +2,15 @@ import Cfg
 import copy
 import App_Time
 import App_Calendar
-
-
+import User_Control
+import App_Ruokalista
+import App_Weather
+import App_gmail
 # This function finds the next possible place to put the application and then puts it there
 # It searches down from the given Y coordinate
 
 def Place_App_Corner(app,corner):
 	Cfg.root.update()
-	print(" ")
 
 	OFFSET = 32
 
@@ -51,6 +52,12 @@ def App_Close(app):
 	for i in Cfg.app_list:
 		if i == None:
 			Cfg.app_list.remove(None)
+
+def App_List_Reorganize():
+	for i in Cfg.app_list:
+		if i == None:
+			Cfg.app_list.remove(None)
+
 
 
 def Check_Collision(TargetX,TargetY,app1,app2):
@@ -96,8 +103,39 @@ def Search_FreePosition(app,TargetX,TargetY,direction):
 				print(" & NO COLLISIONS & ")
 				return TargetY
 
-
+def Find_Highest(applist):
+	if len(applist) == 1:
+		return	applist[0]
 	
+	stuffs = []
+
+	for i in applist:
+		stuffs.append(i.Target_Y)
+
+	return max(stuffs)
+
+def Find_Lowest(applist):
+	if len(applist) == 1:
+		return	applist[0]
+	
+	stuffs = []
+
+	for i in applist:
+		stuffs.append(i.Target_Y)
+
+	return min(stuffs)
+
+def Clear_Apps():
+	while Cfg.app_list():
+		target = Find_Lowest(Cfg.app_list)
+		target.exfiltrate()
+		Cfg.root.after(300, Clear_Apps)
+
+def Open_User_apps():
+	list = User_Control.UserGetSettings(Cfg.active_user)
+	for i in list:
+
+		Create_App(i[0], i[1], i[2])
 
 
 # This function is used to create applications at given coordintes
@@ -109,3 +147,10 @@ def Create_App(appname, X, Y):
 		Cfg.app_list.append(App_Time.AppC_Time(Cfg.root,X,Y))
 	elif appname == "Calendar":
 		Cfg.app_list.append(App_Calendar.AppC_Calendar(Cfg.root,X,Y))
+	elif appname == "Ruokalista":
+		Cfg.app_list.append(App_Ruokalista.AppC_Ruokalista(Cfg.root,X,Y))
+	elif appname == "Weather":
+		Cfg.app_list.append(App_Weather.AppC_Weather(Cfg.root,X,Y))
+	elif appname == "Gmail":
+		Cfg.app_list.append(App_gmail.AppC_Gmail(Cfg.root,X,Y))
+

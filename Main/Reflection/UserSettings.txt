@@ -1,0 +1,3 @@
+Default;Clock 1720 32;Weather 1682 202;Ruokalista 32 32
+Dummy;Clock 1720 32;Weather 1682 202;Ruokalista 32 32;Calendar 32 711;Gmail 500 500
+Dummy;Clock 1720 32;Weather 1682 202;Ruokalista 32 32;Gmail 32 744

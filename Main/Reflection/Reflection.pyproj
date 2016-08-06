@@ -39,6 +39,7 @@
     <Compile Include="App_Time.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="App_Twitter.py" />
     <Compile Include="App_Weather.py">
       <SubType>Code</SubType>
     </Compile>
@@ -55,9 +56,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Main.py" />
-    <Compile Include="User_Control.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="User_Control.py" />
     <Compile Include="wifsm2.py" />
   </ItemGroup>
   <PropertyGroup>

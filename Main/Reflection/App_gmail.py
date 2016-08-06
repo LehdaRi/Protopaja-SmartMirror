@@ -17,7 +17,7 @@ class AppC_Gmail(Frame):
 		self.speedy=2
 		self.speedx=2
 		self.name = "Gmail"
-		self.hardheight = 304
+		self.hardheight = 320
 		self.hardwidth = 502
 		self.doomed = False
 
@@ -36,7 +36,7 @@ class AppC_Gmail(Frame):
 	
 	### Draw the app
 		
-		response = wifsm2.emailList(Cfg.active_user, 10)
+		response = wifsm2.emailList(Cfg.active_user, 5)
 	
 		image = PhotoImage(file = 'images\\gmail.gif')
 		
@@ -75,10 +75,11 @@ class AppC_Gmail(Frame):
 		self.speedy = abs(self.Target_Y - self.winfo_y())/10
 		self.speedx = abs(self.Target_X - self.winfo_x())/10
 
-		if abs(self.Target_Y - self.winfo_y()) <= 2:
+
+		if abs(self.Target_Y - self.winfo_y()) <= 5:
 			self.speedy = abs(self.Target_Y - self.winfo_y())
 
-		if abs(self.Target_X - self.winfo_x()) <= 2:
+		if abs(self.Target_X - self.winfo_x()) <= 5:
 			self.speedx = abs(self.Target_X - self.winfo_x())
 
 		if self.Target_X < self.winfo_x():
@@ -87,8 +88,7 @@ class AppC_Gmail(Frame):
 			self.Xmove=self.speedx
 		elif self.Target_X == self.winfo_x():
 			self.Xmove=0
-			if self.doomed ==  True:
-				self.destroy()
+			
 
 		if self.Target_Y < self.winfo_y():
 			self.Ymove=-self.speedy
@@ -100,6 +100,12 @@ class AppC_Gmail(Frame):
 		self.place(x=self.winfo_x()+self.Xmove,y=self.winfo_y()+self.Ymove)
 		### Move animation above this line ###
 
+	def exfiltrate(self):
+		if self.winfo_x() < Cfg.root.winfo_screenwidth()/2:
+			self.Target_X = self.winfo_x()-32- 32-self.hardwidth
+		else:
+			self.Target_X = self.winfo_x() + 32 + 32 + self.hardwidth
+		self.doomed = True
 
 	def loophandler1000(self):
 		#print(self.winfo_width(),self.winfo_height())

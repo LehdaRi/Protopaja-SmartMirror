@@ -63,6 +63,7 @@ class AppC_Time(Frame):
 		self.doomed = True
 
 	def loophandler40(self):
+		
 		self.timestringlist = localtime(time())
 		self.timelist[0].set("{:02d}:{:02d}".format(self.timestringlist[3],self.timestringlist[4],))
 		self.timelist[1].set(self.daylist[self.timestringlist[6]])
@@ -74,10 +75,11 @@ class AppC_Time(Frame):
 		self.speedy = abs(self.Target_Y - self.winfo_y())/10
 		self.speedx = abs(self.Target_X - self.winfo_x())/10
 
-		if abs(self.Target_Y - self.winfo_y()) <= 2:
+
+		if abs(self.Target_Y - self.winfo_y()) <= 5:
 			self.speedy = abs(self.Target_Y - self.winfo_y())
 
-		if abs(self.Target_X - self.winfo_x()) <= 2:
+		if abs(self.Target_X - self.winfo_x()) <= 5:
 			self.speedx = abs(self.Target_X - self.winfo_x())
 
 		if self.Target_X < self.winfo_x():
@@ -86,8 +88,7 @@ class AppC_Time(Frame):
 			self.Xmove=self.speedx
 		elif self.Target_X == self.winfo_x():
 			self.Xmove=0
-			if self.doomed ==  True:
-				self.destroy()
+				
 
 		if self.Target_Y < self.winfo_y():
 			self.Ymove=-self.speedy
@@ -95,7 +96,7 @@ class AppC_Time(Frame):
 			self.Ymove=self.speedy
 		elif self.Target_Y == self.winfo_y():
 			self.Ymove=0
-
+		
 		self.place(x=self.winfo_x()+self.Xmove,y=self.winfo_y()+self.Ymove)
 
 

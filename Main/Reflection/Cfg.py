@@ -10,4 +10,4 @@ Events = []
 cursor = None
 
 # This list contains the names of all possible applications
-apps = ["Clock", "Calendar", "Ruokalista","Weather","Gmail"]
+apps = ["Clock", "Calendar", "Ruokalista","Weather","Gmail","Twitter"]

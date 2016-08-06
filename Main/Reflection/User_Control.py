@@ -2,7 +2,7 @@ import Cfg
 import wifsm2
 import api_init3
 import copy
-
+import AppControl
 
 def UserCreate(user):
 	api_init3.goog_cred(user)
@@ -11,6 +11,9 @@ def UserCreate(user):
 def UserLogIn(user):
 	j=wifsm2.getUsers()
 	Cfg.active_user = j[user][0]
+	AppControl.Reload_Apps()
+
+
 
 def UserGetSettings(user):
 	try:

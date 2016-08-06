@@ -55,10 +55,11 @@ class AppC_Time(Frame):
 		self.speedy = abs(self.Target_Y - self.winfo_y())/10
 		self.speedx = abs(self.Target_X - self.winfo_x())/10
 
-		if abs(self.Target_Y - self.winfo_y()) <= 2:
+
+		if abs(self.Target_Y - self.winfo_y()) <= 5:
 			self.speedy = abs(self.Target_Y - self.winfo_y())
 
-		if abs(self.Target_X - self.winfo_x()) <= 2:
+		if abs(self.Target_X - self.winfo_x()) <= 5:
 			self.speedx = abs(self.Target_X - self.winfo_x())
 
 		if self.Target_X < self.winfo_x():
@@ -67,8 +68,7 @@ class AppC_Time(Frame):
 			self.Xmove=self.speedx
 		elif self.Target_X == self.winfo_x():
 			self.Xmove=0
-			if self.doomed ==  True:
-				self.destroy()
+			
 
 		if self.Target_Y < self.winfo_y():
 			self.Ymove=-self.speedy

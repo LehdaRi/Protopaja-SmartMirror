@@ -6,6 +6,7 @@ import User_Control
 import App_Ruokalista
 import App_Weather
 import App_gmail
+import App_Twitter
 # This function finds the next possible place to put the application and then puts it there
 # It searches down from the given Y coordinate
 
@@ -49,14 +50,14 @@ def App_Close(app):
 	target = Cfg.app_list.index(app)
 	app.destroy()
 	Cfg.app_list[target] = None
-	for i in Cfg.app_list:
-		if i == None:
-			Cfg.app_list.remove(None)
+	App_List_Reorganize()
 
 def App_List_Reorganize():
-	for i in Cfg.app_list:
-		if i == None:
-			Cfg.app_list.remove(None)
+	for j in range(len(Cfg.app_list)):
+		for i in Cfg.app_list:
+			if i == None:
+				Cfg.app_list.remove(None)
+
 
 
 
@@ -116,6 +117,7 @@ def Find_Highest(applist):
 
 def Find_Lowest(applist):
 	if len(applist) == 1:
+		print(" 1 item lol")
 		return	applist[0]
 	
 	stuffs = []
@@ -123,15 +125,20 @@ def Find_Lowest(applist):
 	for i in applist:
 		stuffs.append(i.Target_Y)
 
-	return min(stuffs)
+	for i in applist:
+		if i.Target_Y == min(stuffs):
+			return i
 
 def Clear_Apps():
-	while Cfg.app_list():
+	for i in Cfg.app_list:
+		i.exfiltrate()
+	"""if Cfg.app_list:
 		target = Find_Lowest(Cfg.app_list)
 		target.exfiltrate()
-		Cfg.root.after(300, Clear_Apps)
 
-def Open_User_apps():
+		Cfg.root.after(300, Clear_Apps)"""
+
+def Open_User_Apps():
 	list = User_Control.UserGetSettings(Cfg.active_user)
 	for i in list:
 
@@ -153,4 +160,10 @@ def Create_App(appname, X, Y):
 		Cfg.app_list.append(App_Weather.AppC_Weather(Cfg.root,X,Y))
 	elif appname == "Gmail":
 		Cfg.app_list.append(App_gmail.AppC_Gmail(Cfg.root,X,Y))
+	elif appname == "Twitter":
+		Cfg.app_list.append(App_Twitter.AppC_Twitter(Cfg.root,X,Y))
+	
 
+def Reload_Apps():
+	Clear_Apps()
+	Open_User_Apps()

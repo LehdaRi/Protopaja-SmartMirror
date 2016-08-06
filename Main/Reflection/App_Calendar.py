@@ -16,9 +16,9 @@ class AppC_Calendar(Frame):
 		self.Ymove=0
 		self.speedy=2
 		self.speedx=2
-		self.hardheight = 337
+		self.hardheight = 393
 		self.hardwidth = 200
-
+		self.doomed = False
 	# Class specific variables for object operation
 
 			# Get calendar entries
@@ -63,14 +63,14 @@ class AppC_Calendar(Frame):
 			self.CalendarEntries.append(Frame(self, bg="Black"))
 			self.CalendarEntries[-1].pack()
 				# Create label with the date
-			if (j == 0) or not (junk[2]==junk2[2] and junk[1]==junk2[1] and junk[0] == junk2[0]):
-				self.CalendarTimes.append(Label(self.CalendarEntries[-1], text = junk[2]+"."+junk[1]+"."+junk[0], fg="white", bg = "black", font=("Helvetica", 12)))
-				self.CalendarTimes[-1].grid(row=0, columnspan=2, sticky=W)
+			#if (j == 0) or not (junk[2]==junk2[2] and junk[1]==junk2[1] and junk[0] == junk2[0]):
+			self.CalendarTimes.append(Label(self.CalendarEntries[-1], text = junk[2]+"."+junk[1]+"."+junk[0], fg="white", bg = "black", font=("Helvetica", 10)))
+			self.CalendarTimes[-1].grid(row=0, columnspan=2, sticky=W)
 				# Create a divider line
 			self.divider.append(Frame(self.CalendarEntries[-1], bg="White", height = 1, width = 200))
 			self.divider[-1].grid(row=1, columnspan=2)
 				# Create label with the start time
-			self.StartTimes.append(Label(self.CalendarEntries[-1], text = junk[3]+":"+junk[4], fg="white", bg = "black", font=("Helvetica", 12)))
+			self.StartTimes.append(Label(self.CalendarEntries[-1], text = junk[3]+":"+junk[4], fg="white", bg = "black", font=("Helvetica", 10)))
 			self.StartTimes[-1].grid(row=2,column=0,sticky=W)
 
 			junk = i["end"]
@@ -93,6 +93,7 @@ class AppC_Calendar(Frame):
 		else:
 			self.Target_X = self.winfo_x() + 32 + 32 + self.hardwidth
 		self.doomed = True
+
 	def loophandler40(self):
 
 		### Move animation
@@ -101,10 +102,11 @@ class AppC_Calendar(Frame):
 		self.speedy = abs(self.Target_Y - self.winfo_y())/10
 		self.speedx = abs(self.Target_X - self.winfo_x())/10
 
-		if abs(self.Target_Y - self.winfo_y()) <= 2:
+
+		if abs(self.Target_Y - self.winfo_y()) <= 5:
 			self.speedy = abs(self.Target_Y - self.winfo_y())
 
-		if abs(self.Target_X - self.winfo_x()) <= 2:
+		if abs(self.Target_X - self.winfo_x()) <= 5:
 			self.speedx = abs(self.Target_X - self.winfo_x())
 
 		if self.Target_X < self.winfo_x():
@@ -113,8 +115,7 @@ class AppC_Calendar(Frame):
 			self.Xmove=self.speedx
 		elif self.Target_X == self.winfo_x():
 			self.Xmove=0
-			if self.doomed ==  True:
-				self.destroy()
+		
 
 		if self.Target_Y < self.winfo_y():
 			self.Ymove=-self.speedy
@@ -126,6 +127,7 @@ class AppC_Calendar(Frame):
 		self.place(x=self.winfo_x()+self.Xmove,y=self.winfo_y()+self.Ymove)
 
 	def loophandler1000(self):
+		#print(self.winfo_width(),self.winfo_height())
 		pass
 
 	def loophandler60000(self):

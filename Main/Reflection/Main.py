@@ -52,15 +52,13 @@ def LoopHandler40():
 	
 	### Event Handler
 	Cfg.Events = dllhandler.ReadBuffer()
-	#print(Cfg.Events)
-
+	if Cfg.Events:
+		print(Cfg.Events)
+	EventsHandler()
 	try:
 		Cfg.cursor.Draw()
 	except:
 		pass
-
-
-	
 	
 	
 def LoopHandler1000():
@@ -74,6 +72,23 @@ def LoopHandler60000():
 		i.loophandler60000()
 	Cfg.root.after(60000, LoopHandler60000)	
 	
-			
+def EventsHandler():
+	userin = None
+	userout = None
+	users = [None,"Maarek","Akseli","Karl","Joonas","Miika"]
+	for event in Cfg.Events:
+		if event[0] == 1:
+			userin = users[event[1]]
+		elif event[0] == 2:
+			userout = users[event[1]]
+	if not userout == None and userin == None:
+		if userout == Cfg.active_user:
+			Cfg.active_user = "Default"
+			AppControl.Reload_Apps()
+
+	if not userin == None:
+		Cfg.active_user = userin
+		AppControl.Reload_Apps()
+
 
 Main()

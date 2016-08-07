@@ -8,23 +8,19 @@
 #include <thread>
 
 
-int trainingTest(void) {
-	return cnnTrainingTest();
-}
-
 int main()
 {
-	//return trainingTest();
-
 	using namespace std::chrono_literals;
 
-	VISION_HANDLE vision = launchVision(true, true);
+	VISION_HANDLE vision = launchVision(true, false);
+
+	//trainNetwork(vision);
 
 	Event* event = new Event;
 	for (bool running = true; running;) {
 		while (pollEvent(vision, event)) {
 			printf("Polled event with type = %u and data = %u\n", event->type, event->data);
-			if (event->type == 4)
+			if (event->type == 10)
 				running = false;
 		}
 

@@ -30,8 +30,6 @@ Cam::Cam(int camId, uint32_t width, uint32_t height, double fps) :
 	_width = _cap.get(CV_CAP_PROP_FRAME_WIDTH);
 	_height = _cap.get(CV_CAP_PROP_FRAME_HEIGHT);
 
-	printf("w: %u, h: %u\n", _width, _height);
-
 	_frameData.resize(_width * _height * 3, 0);
 	int fs[] = { (int)_width, (int)_height };
 
@@ -86,15 +84,9 @@ void Cam::writeToTexture(Texture& texture) {
 	texture.update(_frame.data, GL_BGR);
 }
 
-void Cam::detectFaces(FaceRecognizer& faceRecognizer) {
+void Cam::detectFaces(FaceRecognizer& faceRecognizer, uint64_t& nFaces, uint64_t& faceId) {
 	std::lock_guard<std::mutex> lock(_mutex);
 	if (_frame.empty())
 		return;
-	faceRecognizer.detectFaces(_frame);
+	faceRecognizer.detectFaces(_frame, nFaces, faceId);
 }
-
-/*
-const cv::Mat& Cam::frame(void) const {
-	return _frame;
-}
-*/

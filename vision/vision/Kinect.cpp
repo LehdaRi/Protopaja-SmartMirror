@@ -19,8 +19,8 @@ Kinect::Kinect(void) :
 	_colorFrameReader			(nullptr),
 	_colorFrameData				(nullptr),
 	_colorFrameDescription		(nullptr),
-	_colorFrameMat				(cv::Size(1920, 1080), CV_8UC4)
-	//_colorFrameDataConverted	(1920*1080*4, 0)
+	_colorFrameMat				(cv::Size(1920, 1080), CV_8UC4),
+	_colorFrameMatBgr			(cv::Size(1920, 1080), CV_8UC3)
 {
 	//	Kinect sensor
 	if (!SUCCEEDED(GetDefaultKinectSensor(&_sensor)))
@@ -112,13 +112,7 @@ void Kinect::operator()(Texture* depthTexture) {
 
 			hr = _colorFrameData->CopyConvertedFrameDataToArray(colorFrameWidth * colorFrameHeight * 4 * sizeof(unsigned char),
 				 _colorFrameMat.data, ColorImageFormat_Bgra);
-			/*if (SUCCEEDED(hr)) {
-				glBindTexture(GL_TEXTURE_2D, *colorTexture);
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, colorFrameWidth, colorFrameHeight, 0,
-					GL_RGBA, GL_UNSIGNED_BYTE, _colorFrameMat.data);
-			}
-			else
-				fprintf(stderr, "Unable to read color buffer\n");*/
+			cv::cvtColor(_colorFrameMat, _colorFrameMatBgr, cv::COLOR_BGRA2BGR);
 		}
 	}
 
@@ -154,11 +148,11 @@ void Kinect::operator()(Texture* depthTexture) {
 }
 
 void Kinect::writeColorToTexture(Texture& texture) {
-	texture.update(_colorFrameMat.data, GL_BGRA);
+	texture.update(_colorFrameMatBgr.data, GL_BGR);
 }
 
-void Kinect::detectFaces(FaceRecognizer& faceRecognizer) {
+void Kinect::detectFaces(FaceRecognizer& faceRecognizer, uint64_t& nFaces, uint64_t& faceId) {
 	if (_colorFrameMat.empty())
 		return;
-	faceRecognizer.detectFaces(_colorFrameMat);
+	faceRecognizer.detectFaces(_colorFrameMatBgr, nFaces, faceId);
 }

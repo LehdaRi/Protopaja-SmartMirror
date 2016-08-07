@@ -28,8 +28,7 @@ namespace Vision {
 		unsigned height(void) const;
 
 		void writeToTexture(Texture& texture);
-		void detectFaces(FaceRecognizer& faceRecognizer);
-		//const cv::Mat& frame(void);
+		void detectFaces(FaceRecognizer& faceRecognizer, uint64_t& nFaces, uint64_t& faceId);
 
 	private:
 		std::atomic<bool>		_running;

@@ -24,7 +24,7 @@ namespace Vision {
 		void operator()(Texture* depthTexture);
 
 		void writeColorToTexture(Texture& texture);
-		void detectFaces(FaceRecognizer& faceRecognizer);
+		void detectFaces(FaceRecognizer& faceRecognizer, uint64_t& nFaces, uint64_t& faceId);
 
 	private:
 		IKinectSensor*			_sensor;
@@ -39,6 +39,7 @@ namespace Vision {
 		IColorFrame*			_colorFrameData;
 		IFrameDescription*		_colorFrameDescription;
 		cv::Mat					_colorFrameMat;
+		cv::Mat					_colorFrameMatBgr;
 	};
 
 

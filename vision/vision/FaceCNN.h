@@ -9,6 +9,9 @@ namespace Vision {
 
 	class FaceCNN {
 	public:
+		friend class CNNTrainer;
+
+		FaceCNN(void);
 		FaceCNN(const std::string& fileName);
 
 		tiny_cnn::vec_t operator()(cv::Mat& input);

@@ -157,9 +157,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cam.h" />
+    <ClInclude Include="CNNDataBase.h" />
     <ClInclude Include="CNNTrainer.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="Device.h" />
+    <ClInclude Include="dirent.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="FaceCNN.h" />
     <ClInclude Include="FaceRecognizer.h" />
@@ -192,6 +194,7 @@
     <ClCompile Include="FaceRecognizer.cpp" />
     <ClCompile Include="Kinect.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="CNNDataBase.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

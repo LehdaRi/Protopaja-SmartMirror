@@ -58,7 +58,7 @@ def getHomeTimeline(user, tweet_numb=10):
 		id = '@' + tweet.user.screen_name
 		name = str(tweet.user.name)
 		time = str(tweet.created_at)
-		result = {'id': id, 'name': name, 'time': time, 'text': text}
+		result = {'id': id, 'name': name, 'time': time, 'text': text, 'picture': str(tweet.user.profile_image_url)}
 		tweets.append(result)
 		
 	return tweets

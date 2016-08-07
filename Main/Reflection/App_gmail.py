@@ -17,8 +17,8 @@ class AppC_Gmail(Frame):
 		self.speedy=2
 		self.speedx=2
 		self.name = "Gmail"
-		self.hardheight = 320
-		self.hardwidth = 502
+		self.hardheight = 725
+		self.hardwidth = 322
 		self.doomed = False
 
 	# Class specific variables for object operation
@@ -45,21 +45,22 @@ class AppC_Gmail(Frame):
 		icon.image = image
 		icon.grid(row=0, column=0)
 		
-		row = 0
+		row = 1
 		for email in response:
 			#name = ''.join(re.findall(r'<(.*?)>', email['From']))+":        "
 			
 			email['Date']=email['Date'][:-6]
 			junk = email['From'].split("<")
 			name = junk[0]
-			Label(self, text=name , fg="white", bg="Black", font=("Helvetica", 12)).grid(row=1+(row*3), column=0, sticky=SW)
-			Label(self, text=email["Subject"],anchor=W, justify=LEFT,wraplength=400,\
+			Label(self, text=name , fg="white", bg="Black", font=("Helvetica", 12,"bold")).grid(row=row, column=0, sticky=W)
+			Label(self, text=email['Date'], fg="white", bg="Black", font=("Helvetica", 8,"italic")).grid(row=row, column=1, sticky=W)
+			row = row + 1
+			Label(self, text=email["Subject"],anchor=W, justify=LEFT,wraplength=320,\
 										 fg="white", bg="Black", font=("Helvetica", 12))\
-										 .grid(row=1+(row*3), column=1, sticky=W, rowspan = 2)
+										 .grid(row=row, column=0,columnspan = 3, sticky=W,)
 	
-			Label(self, text=email['Date'], fg="white", bg="Black", font=("Helvetica", 8)).grid(row=2+(row*3), column=0, sticky=NW)
-			if row < 4:
-				Frame(self, bg="White", height = 1, width = 500).grid(row=3+(row*3), column=0, sticky=NW, columnspan = 2)
+			row = row + 1
+			Frame(self, bg="White", height = 1, width = 320).grid(row=row, column=0, sticky=NW, columnspan = 2)
 			row = row + 1	
 			
 		

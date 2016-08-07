@@ -22,7 +22,6 @@ class AppC_Twitter(Frame):
 		self.name = "Twitter"
 		self.hardheight = 936
 		self.hardwidth = 658
-		self.doomed = False
 		
 
 	# Class specific variables for object operation
@@ -47,7 +46,7 @@ class AppC_Twitter(Frame):
 			if a:
 				os.remove(file)
 	
-		response = wifsm2.getHomeTimeline(Cfg.active_user, tweet_numb=5)
+		response = wifsm2.getHomeTimeline(Cfg.active_user, tweet_numb=10)
 		
 		image1 = PhotoImage(file = 'images\\2110817.png')
 		
@@ -58,26 +57,47 @@ class AppC_Twitter(Frame):
 		
 		numb = 1
 		for tweet in response:
-			Frame(self, bg="White", height = 1, width = 250).grid(row=numb, column=1, sticky=W,columnspan = 5,padx = 5, pady = 5)
-			numb = numb + 1
+			#print(tweet)
 			picture = 'profile_pic' + str(numb)
 			urllib.request.urlretrieve(tweet["picture"], picture  + '.jpg')
 			img = Image.open(picture  + '.jpg')
 			img.save(picture + '.png')
 			os.remove(picture + '.jpg')
 			image = PhotoImage(file = picture + '.png')
-			icon = Label(self, image=image,anchor=NW)
+			icon = Label(self, image=image)
 			icon.image = image
-			icon.grid(row=numb, rowspan = 3, column=0, columnspan = 2, padx = 10, pady = 10,sticky=NW)
+			icon.grid(row=numb, rowspan = 2, column=1, columnspan = 2, padx = 10, pady = 10)
 			
+			s1 = ''
+			s2 = ''
+			s3 = ''
+			ccount = 1
+			for c in tweet["text"]:
+				if ccount <= 90:
+					s1 = s1 + c
+				elif ccount <= 180 and ccount > 90:
+					if ccount == 91 and c == ' ':
+						pass
+					else:
+						s2 = s2 + c
+				elif ccount <= 270 and ccount > 180:
+					if ccount == 181 and c == ' ':
+						pass
+					else:
+						s3 = s3 + c
+				ccount = ccount + 1
 			
-			Label(self, text=tweet["name"]+" \n"+ tweet["id"],anchor=W, justify=LEFT, fg="white", bg="Black", font=("Helvetica", 10,"bold")).grid(row=numb,rowspan = 2, column=2, sticky=W)
-			Label(self, text=tweet["time"] , fg="white", bg="Black", font=("Helvetica", 8,"italic")).grid(row=numb, column=3, sticky=W)
-			#Label(self, text=tweet["id"] , fg="white", bg="Black", font=("Helvetica", 10)).grid(row=numb, column=2, sticky=W)
-			numb = numb + 2
-			Frame(self, bg="White", height = 1, width = 250).grid(row=numb, column=2, sticky=W,columnspan = 3)
+			Label(self, text=tweet["name"] , fg="white", bg="Black", font=("Helvetica", 12)).grid(row=numb, column=3, sticky=W)
+			Label(self, text=tweet["id"] , fg="white", bg="Black", font=("Helvetica", 10)).grid(row=numb, column=4, sticky=W)
+			Label(self, text=tweet["time"] , fg="white", bg="Black", font=("Helvetica", 7)).grid(row=numb, column=5, sticky=W)
 			numb = numb + 1
-			Label(self, text=tweet["text"] ,anchor=W, justify=LEFT,wraplength=280, fg="white", bg="Black", font=("Helvetica", 10)).grid(row=numb, column=1, columnspan = 3, sticky=W)
+			Label(self, text=s1 , fg="white", bg="Black", font=("Helvetica", 10)).grid(row=numb, column=3, columnspan = 3, sticky=W)
+			if s2 != '':
+				numb = numb + 1
+				Label(self, text=s2 , fg="white", bg="Black", font=("Helvetica", 10)).grid(row=numb, column=3, columnspan = 3, sticky=W)
+			if s3 != '':
+				numb = numb + 1
+				Label(self, text=s3 , fg="white", bg="Black", font=("Helvetica", 10)).grid(row=numb, column=3, columnspan = 3, sticky=W)
 			numb = numb + 1
 
 	### End of startup code
@@ -87,16 +107,13 @@ class AppC_Twitter(Frame):
 
 
 		### Move animation handling below ###
-		self.Target_Y = int(self.Target_Y)
-		self.Target_X = int(self.Target_X)
 		self.speedy = abs(self.Target_Y - self.winfo_y())/10
 		self.speedx = abs(self.Target_X - self.winfo_x())/10
 
-
-		if abs(self.Target_Y - self.winfo_y()) <= 5:
+		if abs(self.Target_Y - self.winfo_y()) <= 2:
 			self.speedy = abs(self.Target_Y - self.winfo_y())
 
-		if abs(self.Target_X - self.winfo_x()) <= 5:
+		if abs(self.Target_X - self.winfo_x()) <= 2:
 			self.speedx = abs(self.Target_X - self.winfo_x())
 
 		if self.Target_X < self.winfo_x():
@@ -105,7 +122,6 @@ class AppC_Twitter(Frame):
 			self.Xmove=self.speedx
 		elif self.Target_X == self.winfo_x():
 			self.Xmove=0
-			
 
 		if self.Target_Y < self.winfo_y():
 			self.Ymove=-self.speedy
@@ -119,7 +135,7 @@ class AppC_Twitter(Frame):
 
 
 	def loophandler1000(self):
-		print(self.winfo_width(),self.winfo_height())
+		#print(self.winfo_width(),self.winfo_height())
 		pass
 
 	def loophandler60000(self):

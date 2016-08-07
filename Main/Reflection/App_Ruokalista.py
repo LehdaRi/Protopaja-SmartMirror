@@ -55,9 +55,10 @@ class AppC_Ruokalista(Frame):
 					junk.append(Label(self, text = i,anchor=W, justify=LEFT,wraplength= 250, fg="white", bg="Black", font=("Helvetica", 10)))
 				self.foods.append(junk)
 
-		self.names[0].pack()
-		for i in self.foods[0]:
-			i.pack(anchor=W)
+		if self.names:
+			self.names[0].pack()
+			for i in self.foods[0]:
+				i.pack(anchor=W)
 
 	### End of startup code
 	def exfiltrate(self):
@@ -104,21 +105,21 @@ class AppC_Ruokalista(Frame):
 
 
 	def loophandler1000(self):
-
-		self.names[self.active].pack_forget()
-		for i in self.foods[self.active]:
-			i.pack_forget()
-
-
-		if self.active == len(self.names)-1:
-			self.active = 0
-		else:
-			self.active += 1
+		if self.names:
+			self.names[self.active].pack_forget()
+			for i in self.foods[self.active]:
+				i.pack_forget()
 
 
-		self.names[self.active].pack(anchor=W)
-		for i in self.foods[self.active]:
-			i.pack(anchor=W)
+			if self.active == len(self.names)-1:
+				self.active = 0
+			else:
+				self.active += 1
+
+
+			self.names[self.active].pack(anchor=W)
+			for i in self.foods[self.active]:
+				i.pack(anchor=W)
 
 	def loophandler60000(self):
 		pass

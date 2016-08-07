@@ -8,6 +8,7 @@ import Debugger
 import AppControl
 import dllhandler
 import wifsm2
+import random
 ### Dll startup
 
 
@@ -74,9 +75,26 @@ def LoopHandler60000():
 	
 def EventsHandler():
 	userin = None
-	userout = None
-	users = [None,"Maarek","Akseli","Karl","Joonas","Miika"]
+	users = [None,"Dummy","Dumbo","Axel"]
+
+
 	for event in Cfg.Events:
+		if event[0] == 1:
+			if event[1] == 0:
+				userin = "Default"
+			elif event[1] == 5:
+				userin = users[random.randint(1,3)]
+		elif event[0] == 2:
+			if event[1] == 0:
+				userin = "Default"
+			elif event[1] == 5:
+				userin = "Default"
+
+	if not userin == Cfg.active_user:
+		Cfg.active_user = userin
+		AppControl.Reload_Apps()
+
+	"""for event in Cfg.Events:
 		if event[0] == 1:
 			userin = users[event[1]]
 		elif event[0] == 2:
@@ -88,7 +106,7 @@ def EventsHandler():
 
 	if not userin == None:
 		Cfg.active_user = userin
-		AppControl.Reload_Apps()
+		AppControl.Reload_Apps()"""
 
 
 Main()

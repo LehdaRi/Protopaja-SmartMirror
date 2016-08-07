@@ -1,0 +1,6 @@
+noCamsFaceDetectionBufferSize	10
+camsFaceDetectionBufferSize	30
+faceDetectionLowerThreshold	0.5
+faceDetectionUpperThreshold	1.2
+knownFacesCompensationFactor	2.0
+maxEventInterval		30

@@ -17,8 +17,8 @@ class AppC_Gmail(Frame):
 		self.speedy=2
 		self.speedx=2
 		self.name = "Gmail"
-		self.hardheight = 725
-		self.hardwidth = 322
+		self.hardheight = 346
+		self.hardwidth = 351
 		self.doomed = False
 
 	# Class specific variables for object operation
@@ -109,7 +109,7 @@ class AppC_Gmail(Frame):
 		self.doomed = True
 
 	def loophandler1000(self):
-		#print(self.winfo_width(),self.winfo_height())
+		print(self.winfo_width(),self.winfo_height())
 		pass
 
 	def loophandler60000(self):

@@ -20,8 +20,8 @@ class AppC_Twitter(Frame):
 		self.speedy=2
 		self.speedx=2
 		self.name = "Twitter"
-		self.hardheight = 936
-		self.hardwidth = 658
+		self.hardheight = 741
+		self.hardwidth = 322
 		self.doomed = False
 		
 
@@ -81,6 +81,12 @@ class AppC_Twitter(Frame):
 			numb = numb + 1
 
 	### End of startup code
+	def exfiltrate(self):
+		if self.winfo_x() < Cfg.root.winfo_screenwidth()/2:
+			self.Target_X = self.winfo_x()-32- 32-self.hardwidth
+		else:
+			self.Target_X = self.winfo_x() + 32 + 32 + self.hardwidth
+		self.doomed = True
 
 	def loophandler40(self):
 		
@@ -119,7 +125,7 @@ class AppC_Twitter(Frame):
 
 
 	def loophandler1000(self):
-		print(self.winfo_width(),self.winfo_height())
+		#print(self.winfo_width(),self.winfo_height())
 		pass
 
 	def loophandler60000(self):

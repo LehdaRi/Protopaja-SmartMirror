@@ -16,8 +16,8 @@ class AppC_Time(Frame):
 		self.speedy=2
 		self.speedx=2
 		self.name = "Clock"
-		self.hardheight = 168
-		self.hardwidth = 138
+		self.hardheight = 138
+		self.hardwidth = 168
 		self.doomed = False
 
 	# Class specific variables for object operation
@@ -38,7 +38,7 @@ class AppC_Time(Frame):
 
 			# Create frame for the app and place at given coordinates
 		Frame.__init__(self, parent)
-		Frame.config(self, bg="#000000")
+		Frame.config(self, bg="#FFF000")
 		self.place(x=X, y=Y)
 
 	
@@ -103,6 +103,7 @@ class AppC_Time(Frame):
 
 
 	def loophandler1000(self):
+		#print(self.winfo_width(),self.winfo_height())
 		pass
 
 	def loophandler60000(self):

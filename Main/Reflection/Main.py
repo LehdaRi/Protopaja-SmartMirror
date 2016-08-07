@@ -15,7 +15,7 @@ import random
 
 
 def Main():
-	dllhandler.StartVision()
+	#dllhandler.StartVision()
 
 	### Initiate
 	Cfg.root = Tk()
@@ -31,7 +31,7 @@ def Main():
 	Cfg.root.after(40, LoopHandler40)
 	Cfg.root.after(1000, LoopHandler1000)
 	Cfg.root.after(60000, LoopHandler60000)
-	Cfg.root.after(1000, AppControl.Open_User_Apps)
+	Cfg.root.after(1100, AppControl.Open_User_Apps)
 	Cfg.root.mainloop()
 
 
@@ -52,10 +52,10 @@ def LoopHandler40():
 	Cfg.root.after(16, LoopHandler40)
 	
 	### Event Handler
-	Cfg.Events = dllhandler.ReadBuffer()
+	"""Cfg.Events = dllhandler.ReadBuffer()
 	if Cfg.Events:
 		print(Cfg.Events)
-	EventsHandler()
+	EventsHandler()"""
 	try:
 		Cfg.cursor.Draw()
 	except:

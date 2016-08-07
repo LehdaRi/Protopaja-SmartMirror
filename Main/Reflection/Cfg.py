@@ -4,7 +4,7 @@ app_list = []
 # These are global variables
 debugger = None
 root = None
-active_user = "Dummy"
+active_user = "Default"
 vision = None
 Events = []
 cursor = None

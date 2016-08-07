@@ -166,4 +166,12 @@ def Create_App(appname, X, Y):
 
 def Reload_Apps():
 	Clear_Apps()
-	Open_User_Apps()
+	Cfg.root.after(100, Check_Applist)
+
+def Check_Applist():
+	if not Cfg.app_list:
+		Open_User_Apps()
+	else:
+		Cfg.root.after(100, Check_Applist)
+
+	

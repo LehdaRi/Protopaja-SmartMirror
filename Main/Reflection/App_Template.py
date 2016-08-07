@@ -15,10 +15,10 @@ class AppC_Time(Frame):
 		self.Ymove=0
 		self.speedy=2
 		self.speedx=2
-		self.name = "Clock"
+		self.name = "Name"
 		self.hardheight = 138
 		self.hardwidth = 168
-		
+		self.doomed = False
 
 	# Class specific variables for object operation
 		
@@ -38,19 +38,28 @@ class AppC_Time(Frame):
 
 
 	### End of startup code
+	def exfiltrate(self):
+		if self.winfo_x() < Cfg.root.winfo_screenwidth()/2:
+			self.Target_X = self.winfo_x()-32- 32-self.hardwidth
+		else:
+			self.Target_X = self.winfo_x() + 32 + 32 + self.hardwidth
+		self.doomed = True
 
 	def loophandler40(self):
 		
 
 
 		### Move animation handling below ###
+		self.Target_Y = int(self.Target_Y)
+		self.Target_X = int(self.Target_X)
 		self.speedy = abs(self.Target_Y - self.winfo_y())/10
 		self.speedx = abs(self.Target_X - self.winfo_x())/10
 
-		if abs(self.Target_Y - self.winfo_y()) <= 2:
+
+		if abs(self.Target_Y - self.winfo_y()) <= 5:
 			self.speedy = abs(self.Target_Y - self.winfo_y())
 
-		if abs(self.Target_X - self.winfo_x()) <= 2:
+		if abs(self.Target_X - self.winfo_x()) <= 5:
 			self.speedx = abs(self.Target_X - self.winfo_x())
 
 		if self.Target_X < self.winfo_x():
@@ -59,6 +68,7 @@ class AppC_Time(Frame):
 			self.Xmove=self.speedx
 		elif self.Target_X == self.winfo_x():
 			self.Xmove=0
+			
 
 		if self.Target_Y < self.winfo_y():
 			self.Ymove=-self.speedy

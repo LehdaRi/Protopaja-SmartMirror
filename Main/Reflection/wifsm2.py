@@ -58,7 +58,7 @@ def getHomeTimeline(user, tweet_numb=10):
 		id = '@' + tweet.user.screen_name
 		name = str(tweet.user.name)
 		time = str(tweet.created_at)
-		result = {'id': id, 'name': name, 'time': time, 'text': text}
+		result = {'id': id, 'name': name, 'time': time, 'text': text, 'picture': str(tweet.user.profile_image_url)}
 		tweets.append(result)
 		
 	return tweets
@@ -143,8 +143,7 @@ def calendarList(user, event_numb=5):
 		stuff["end"] = [junk[:4], junk[5:7], junk[8:10],junk[11:13],junk[14:16],junk[17:19]]
 		stuff["title"] = event['summary']
 		elist.append(stuff)
-	
-	print(elist)	
+		
 	return elist
 	
 def getRuokalistatT():
@@ -347,7 +346,44 @@ def getRuokalistat():
 		food4.append(a)
 	foods["Mau-kas"] = food4
 	
-	return foods
+	return StringFixer(foods)
+
+
+def StringFixer(input):
+
+	for keys,values in input.items():
+		
+		if values:
+			for i in range(len(values)):
+				if i in range(len(values)):
+					if values[i] in ["  LOUNAS","LOUNAS","KASVISLOUNAS","SALAATTILOUNAS","KEITTOLOUNAS","À LA CARTE","A LA CARTE"]:
+						del values[i]
+					if len(values[i]) < 12:
+						values[i-1] += values[i]
+						del values[i]
+				
+			for i in range(len(values)):
+				values[i] = values[i].strip()
+				values[i] = values[i].replace(",","")
+				values[i] = values[i].replace("(","")
+				values[i] = values[i].replace(")","")
+				values[i] = values[i].replace("*","")
+				values[i] = values[i].replace("1","")
+				values[i] = values[i].replace("2","")
+				values[i] = values[i].replace("3","")
+				values[i] = values[i].replace("4","")
+				values[i] = values[i].replace("5","")
+				values[i] = values[i].replace("6","")
+				values[i] = values[i].replace("7","")
+				values[i] = values[i].replace("8","")
+				values[i] = values[i].replace("9","")
+				values[i] = values[i].replace("0","")
+				values[i] = values[i].replace("euro","")
+				if "/" in values[i]:
+					junk = values[i].split("/")
+					values[i] = junk[0]
+				
+	return input
 	
 def getNow(utc_add=3):
 	

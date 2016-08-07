@@ -5,6 +5,7 @@ import User_Control
 import Cfg
 import wifsm2
 import api_init3
+import Cursor
 
 
 
@@ -22,13 +23,13 @@ def DebugSwitch(event):	# Open or close the debugger window
 		Cfg.debugger.title("Reflection Debugger")
 		Cfg.debugger.config(bg="#C0C0C0")
 		Cfg.debugger.bind("<F1>", DebugSwitch)
+		Cfg.debugger.bind("<F2>", quit)
 		userslist = None
 
 	# Create System Frame
 		systemframe = LabelFrame(Cfg.debugger, text="System")
 		systemframe.pack( side = LEFT, fill = Y  )
 
-			# Create background inverting button
 		sfb_invert = Button(systemframe, text="Invert background", command=SysBgInvert)
 		sfb_invert.pack( side = TOP, fill = X )
 		sfb_deluser = Button(systemframe, text = "Delete users", command = api_init3.destroyUsers)
@@ -39,6 +40,23 @@ def DebugSwitch(event):	# Open or close the debugger window
 		sfb_newuser.pack( side = TOP, fill = X )
 		sfb_login = Button(systemframe, text="Log in user", command = lambda: User_Control.UserLogIn(userslist.index(ACTIVE)))
 		sfb_login.pack( side = TOP, fill = X )
+		sfb_cursoron = Button(systemframe, text="Cursor On", command = Cursor.CursorOn)
+		sfb_cursoron.pack( side = TOP, fill = X )
+		sfb_cursoroff = Button(systemframe, text="Cursor Off", command =  Cursor.CursorOff)
+		sfb_cursoroff.pack( side = TOP, fill = X )
+		sfb_cursorup = Button(systemframe, text="Cursor Up", command = lambda: Cursor.CursorMove("UP"))
+		sfb_cursorup.pack( side = TOP, fill = X )
+		sfb_cursordown = Button(systemframe, text="Cursor Down", command = lambda: Cursor.CursorMove("DOWN"))
+		sfb_cursordown.pack( side = TOP, fill = X )
+		sfb_cursorleft = Button(systemframe, text="Cursor Left", command = lambda: Cursor.CursorMove("LEFT"))
+		sfb_cursorleft.pack( side = TOP, fill = X )
+		sfb_cursorright = Button(systemframe, text="Cursor Right", command = lambda: Cursor.CursorMove("RIGHT"))
+		sfb_cursorright.pack( side = TOP, fill = X )
+		sfb_savesettings = Button(systemframe, text="Save Settings", command = User_Control.UserSaveSettings)
+		sfb_savesettings.pack( side = TOP, fill = X )
+		#sfb_loadsettings = Button(systemframe, text="Load Settings", command = User_Control.UserLogin)
+		#sfb_loadsettings.pack( side = TOP, fill = X )
+
 
 	# Create Users Frame
 		usersframe = LabelFrame(Cfg.debugger, text="Users")
@@ -79,7 +97,7 @@ def DebugSwitch(event):	# Open or close the debugger window
 		Fill_Manager(taskbox)
 
 			# Create close task button
-		tfb_close = Button(taskframe, text="Close task", command = lambda: Task_Close(app_list[taskbox.index(ACTIVE)]) )
+		tfb_close = Button(taskframe, text="Close task", command = lambda: Task_Close(taskbox.index(ACTIVE)) )
 		tfb_close.pack( side = TOP, fill = X )
 
 	# Make sure that the debugger is in the front
@@ -131,10 +149,10 @@ def Task_New():
 	placeNS.grid(row = 0, column = 0, ipadx=4)
 
 
-
-
 def Task_Close(task):
-	task.destroy()
+	Cfg.app_list[task].destroy()
+	Cfg.app_list[task] = None
+	AppControl.App_List_Reorganize()
 	
 
 def DebugClose():	# Close the Debugger window

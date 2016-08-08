@@ -1,6 +1,8 @@
 from tkinter import*
 from ctypes import*
 
+
+import sys
 import Cfg
 import Cursor
 import User_Control
@@ -15,8 +17,8 @@ import random
 
 
 def Main():
-	#dllhandler.StartVision()
-
+	dllhandler.StartVision()
+	sys.modules['win32file'] = None
 	### Initiate
 	Cfg.root = Tk()
 	Cfg.root.geometry('%dx%d+%d+%d' % (Cfg.root.winfo_screenwidth(), Cfg.root.winfo_screenheight(), 0, 0))
@@ -25,18 +27,21 @@ def Main():
 	# Bind keyboard keys.
 	Cfg.root.bind("<F1>", Debugger.DebugSwitch)	# Bind F1 Used for debugger window swiching
 	Cfg.root.grid()
-
+	
 
 # Start delayed loops
 	Cfg.root.after(40, LoopHandler40)
 	Cfg.root.after(1000, LoopHandler1000)
 	Cfg.root.after(60000, LoopHandler60000)
 	Cfg.root.after(1100, AppControl.Open_User_Apps)
+	
+
 	Cfg.root.mainloop()
 
 
 
 def LoopHandler40():
+	
 	for i in Cfg.app_list:
 		i.loophandler40()
 
@@ -52,10 +57,11 @@ def LoopHandler40():
 	Cfg.root.after(16, LoopHandler40)
 	
 	### Event Handler
-	"""Cfg.Events = dllhandler.ReadBuffer()
+
+	Cfg.Events = dllhandler.ReadBuffer()
 	if Cfg.Events:
 		print(Cfg.Events)
-	EventsHandler()"""
+		EventsHandler()
 	try:
 		Cfg.cursor.Draw()
 	except:
@@ -82,12 +88,12 @@ def EventsHandler():
 		if event[0] == 1:
 			if event[1] == 0:
 				userin = "Default"
-			elif event[1] == 5:
+			else:
 				userin = users[random.randint(1,3)]
 		elif event[0] == 2:
 			if event[1] == 0:
 				userin = "Default"
-			elif event[1] == 5:
+			else:
 				userin = "Default"
 
 	if not userin == Cfg.active_user:

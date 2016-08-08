@@ -38,7 +38,7 @@ class AppC_Time(Frame):
 
 			# Create frame for the app and place at given coordinates
 		Frame.__init__(self, parent)
-		Frame.config(self, bg="#FFF000")
+		Frame.config(self, bg="#000000")
 		self.place(x=X, y=Y)
 
 	

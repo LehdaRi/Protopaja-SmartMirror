@@ -1,0 +1,4 @@
+Default;Ruokalista 32 32;Clock 880 32;Weather 842 202
+Dumbo;Gmail 32 32;Ruokalista 32 410;Clock 880 32;Calendar 848 202;Twitter 32 1147;Weather 842 1420
+Dummy;Clock 880 1750;Twitter 32 32;Ruokalista 32 805;Weather 842 32;Gmail 32 1542;Calendar 848 1325
+Axel;Clock 32 32;Ruokalista 32 202;Weather 32 1420;Twitter 726 1147;Gmail 726 32;Calendar 32 995

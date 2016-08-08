@@ -140,9 +140,12 @@ def Clear_Apps():
 
 def Open_User_Apps():
 	list = User_Control.UserGetSettings(Cfg.active_user)
-	for i in list:
+	if list:
+		for i in list:
 
-		Create_App(i[0], i[1], i[2])
+			Create_App(i[0], i[1], i[2])
+	else:
+		Cfg.root.after(1100, Open_User_Apps)
 
 
 # This function is used to create applications at given coordintes
